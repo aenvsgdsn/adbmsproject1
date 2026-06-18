@@ -16,6 +16,7 @@ import LibraryPage from './pages/LibraryPage';
 import Hostel from './pages/Hostel';
 import AuditLogs from './pages/AuditLogs';
 import Unauthorized from './pages/Unauthorized';
+import LandingPage from './pages/LandingPage';
 
 function App() {
   return (
@@ -33,17 +34,17 @@ function App() {
           }}
         />
         <Routes>
+          <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
           
           {/* Protected Routes */}
-          <Route path="/" element={
+          <Route element={
             <ProtectedRoute>
               <AppLayout />
             </ProtectedRoute>
           }>
-            <Route index element={<Navigate to="/dashboard" replace />} />
-            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="/dashboard" element={<Dashboard />} />
 
             {/* Academic */}
             <Route path="students" element={
@@ -89,7 +90,7 @@ function App() {
           </Route>
 
           {/* Catch all */}
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

@@ -1,8 +1,22 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Eye, EyeOff, Loader2, GraduationCap, ArrowRight } from 'lucide-react';
+import { Eye, EyeOff, Loader2, GraduationCap, ArrowRight, BookOpen, Users, BarChart2 } from 'lucide-react';
 import toast from 'react-hot-toast';
+
+const DEMO_ACCOUNTS = [
+  { role: 'Admin',   email: 'admin@hisup.edu',   password: 'admin123' },
+  { role: 'Faculty', email: 'faculty@hisup.edu',  password: 'password123' },
+  { role: 'Student', email: 'student@hisup.edu',  password: 'password123' },
+  { role: 'Finance', email: 'finance@hisup.edu',  password: 'password123' },
+];
+
+const FEATURES = [
+  { icon: GraduationCap, label: 'Student Portal',  desc: 'Track grades, attendance & fees' },
+  { icon: BookOpen,      label: 'Academic Hub',    desc: 'Courses, sections & schedules' },
+  { icon: Users,         label: 'Faculty Access',  desc: 'Manage classes & mark grades' },
+  { icon: BarChart2,     label: 'Analytics',       desc: 'Real-time institutional data' },
+];
 
 const Login = () => {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -21,162 +35,209 @@ const Login = () => {
       toast.success(`Welcome back, ${user.username}!`);
       navigate('/dashboard');
     } catch (err) {
-      toast.error(err?.response?.data?.error || 'Login failed. Check credentials.');
+      toast.error(err?.response?.data?.error || 'Login failed. Check your credentials.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex animate-fade-in font-inter">
-      {/* Left Panel - Branding */}
-      <div className="hidden lg:flex w-[45%] flex-col justify-between p-12 relative overflow-hidden bg-slate-50">
-        {/* Decorative Background Elements */}
-        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-          <img src="/images/hero.png" alt="Campus" className="w-full h-full object-cover opacity-10" />
-          <div className="absolute inset-0 bg-gradient-to-br from-indigo-950/90 via-slate-900/80 to-slate-950/95" />
-        </div>
-        <div className="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 bg-blue-500 rounded-full blur-[100px] opacity-20 animate-float" />
-        <div className="absolute bottom-0 left-0 -mb-20 -ml-20 w-80 h-80 bg-indigo-500 rounded-full blur-[100px] opacity-20 animate-float delay-150" />
+    <div
+      className="min-h-screen flex font-inter animate-fade-in"
+      style={{ background: 'linear-gradient(135deg, #eff6ff 0%, #f8fafc 50%, #eef2ff 100%)' }}
+    >
+      {/* ── Left Branding Panel ────────────────────────── */}
+      <div
+        className="hidden lg:flex w-[44%] flex-col justify-between p-12 relative overflow-hidden"
+        style={{
+          background: 'linear-gradient(160deg, #1e3a8a 0%, #1d4ed8 60%, #2563eb 100%)',
+        }}
+      >
+        {/* Decorative blobs */}
+        <div className="absolute top-0 right-0 w-96 h-96 rounded-full opacity-10 -mr-32 -mt-32"
+          style={{ background: 'radial-gradient(circle, white, transparent)' }} />
+        <div className="absolute bottom-0 left-0 w-72 h-72 rounded-full opacity-10 -ml-20 -mb-20"
+          style={{ background: 'radial-gradient(circle, white, transparent)' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full opacity-5"
+          style={{ background: 'radial-gradient(circle, white, transparent)' }} />
 
+        {/* Logo */}
         <div className="relative z-10 flex items-center gap-3">
-          <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-600/30">
+          <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30">
             <GraduationCap className="text-white" size={22} />
           </div>
-          <span className="text-white font-bold text-2xl tracking-tight font-outfit">HiSUP 2.0</span>
+          <div>
+            <span className="text-white font-bold text-xl tracking-tight font-outfit">HiSUP</span>
+            <span className="text-blue-200 text-xs ml-1.5 font-semibold">2.0</span>
+          </div>
         </div>
 
-        <div className="relative z-10 my-auto">
-          <h1 className="text-5xl font-extrabold text-white leading-[1.1] mb-6 font-outfit tracking-tight">
-            Next-Generation <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">
-              Campus Management
-            </span>
+        {/* Main Text */}
+        <div className="relative z-10">
+          <h1 className="text-4xl font-extrabold text-white leading-[1.15] mb-5 font-outfit tracking-tight">
+            Next-Generation<br />
+            <span className="text-blue-200">Campus Management</span>
           </h1>
-          <p className="text-slate-300 text-lg leading-relaxed max-w-md mb-12">
-            A unified, intelligent platform to manage your academic journey, student services, and institutional administration.
+          <p className="text-blue-100 text-base leading-relaxed mb-10 max-w-sm">
+            A unified platform to manage your academic journey, student services, and institutional administration.
           </p>
-          
-          <div className="grid grid-cols-2 gap-4 max-w-lg">
-            {[
-              { label: 'Active Students', value: '10,000+' },
-              { label: 'Departments', value: '24' },
-              { label: 'Courses Offered', value: '360+' },
-              { label: 'System Uptime', value: '99.9%' },
-            ].map(({ label, value }, i) => (
-              <div key={label} className="glass rounded-xl p-5 border-slate-700/50 bg-slate-800/40 hover:bg-slate-800/60 transition-colors animate-slide-up" style={{animationDelay: `${i * 100}ms`}}>
-                <div className="text-3xl font-bold text-white font-outfit tracking-tight">{value}</div>
-                <div className="text-indigo-200 text-sm mt-1 font-medium">{label}</div>
+
+          {/* Feature Pills */}
+          <div className="grid grid-cols-2 gap-3">
+            {FEATURES.map(({ icon: Icon, label, desc }) => (
+              <div
+                key={label}
+                className="p-4 rounded-xl flex flex-col gap-2 transition-colors"
+                style={{
+                  background: 'rgba(255,255,255,0.10)',
+                  backdropFilter: 'blur(12px)',
+                  border: '1px solid rgba(255,255,255,0.15)',
+                }}
+              >
+                <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
+                  <Icon size={16} className="text-white" />
+                </div>
+                <div>
+                  <p className="text-white font-semibold text-sm">{label}</p>
+                  <p className="text-blue-200 text-xs">{desc}</p>
+                </div>
               </div>
             ))}
           </div>
         </div>
 
-        <p className="relative z-10 text-slate-500 text-sm font-medium">© {new Date().getFullYear()} HiSUP University Systems</p>
+        <p className="relative z-10 text-blue-300 text-sm">© {new Date().getFullYear()} HiSUP University Systems</p>
       </div>
 
-      {/* Right Panel - Login Form */}
-      <div className="flex-1 flex items-center justify-center p-6 sm:p-12 bg-white lg:bg-slate-50 relative overflow-hidden">
+      {/* ── Right Login Panel ──────────────────────────── */}
+      <div className="flex-1 flex items-center justify-center p-6 sm:p-12 relative">
         {/* Mobile Logo */}
-        <div className="absolute top-8 left-8 flex items-center gap-2 lg:hidden z-10">
-          <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shadow-md">
-            <GraduationCap className="text-white" size={18} />
+        <div className="absolute top-6 left-6 flex items-center gap-2 lg:hidden">
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #2563eb, #1d4ed8)' }}>
+            <GraduationCap className="text-white" size={16} />
           </div>
-          <span className="font-bold text-xl text-slate-900 font-outfit">HiSUP 2.0</span>
+          <span className="font-bold text-lg text-blue-900 font-outfit">HiSUP</span>
         </div>
 
-        <div className="w-full max-w-md bg-white lg:bg-transparent lg:shadow-none shadow-xl rounded-2xl p-8 lg:p-0 relative z-10 animate-slide-in-right">
+        <div className="w-full max-w-md animate-slide-up">
+          {/* Header */}
           <div className="mb-8">
             <h2 className="text-3xl font-extrabold text-slate-900 font-outfit tracking-tight">Welcome back</h2>
-            <p className="text-slate-500 mt-2">Enter your credentials to access the portal</p>
+            <p className="text-slate-500 mt-2 text-sm">Enter your credentials to access the portal</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="form-group">
-              <label htmlFor="login-email" className="text-sm font-bold text-slate-700 block mb-1">Email Address</label>
-              <input
-                id="login-email"
-                type="email"
-                name="email"
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
-                placeholder="you@university.edu"
-                value={form.email}
-                onChange={handleChange}
-                required
-                autoFocus
-              />
-            </div>
-            <div className="form-group">
-              <div className="flex justify-between items-center mb-1">
-                <label htmlFor="login-password" className="text-sm font-bold text-slate-700">Password</label>
-                <a href="#" className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors">Forgot password?</a>
-              </div>
-              <div className="relative">
+          {/* Form Card */}
+          <div
+            className="p-7 rounded-2xl mb-5"
+            style={{
+              background: 'rgba(255,255,255,0.92)',
+              backdropFilter: 'blur(20px)',
+              border: '1px solid rgba(219,234,254,0.70)',
+              boxShadow: '0 8px 32px rgba(37,99,235,0.08)',
+            }}
+          >
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div className="form-group">
+                <label htmlFor="login-email" className="form-label">Email Address</label>
                 <input
-                  id="login-password"
-                  type={showPassword ? 'text' : 'password'}
-                  name="password"
-                  className="w-full px-4 py-3 pr-12 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
-                  placeholder="Enter your password"
-                  value={form.password}
+                  id="login-email"
+                  type="email"
+                  name="email"
+                  className="form-input"
+                  placeholder="you@university.edu"
+                  value={form.email}
                   onChange={handleChange}
                   required
+                  autoFocus
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
-                >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
               </div>
-            </div>
 
-            <button
-              id="login-submit-btn"
-              type="submit"
-              disabled={loading}
-              className="w-full py-3.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg shadow-blue-600/30 hover:shadow-blue-600/40 transition-all flex justify-center items-center gap-2 mt-4 group"
-            >
-              {loading ? (
-                <>
-                  <Loader2 size={18} className="animate-spin" />
-                  <span>Signing in...</span>
-                </>
-              ) : (
-                <>
-                  <span>Sign In</span>
-                  <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-                </>
-              )}
-            </button>
-          </form>
+              <div className="form-group">
+                <div className="flex justify-between items-center mb-1.5">
+                  <label htmlFor="login-password" className="form-label mb-0">Password</label>
+                  <a href="#" className="text-xs font-semibold text-blue-600 hover:text-blue-800 transition-colors">
+                    Forgot password?
+                  </a>
+                </div>
+                <div className="relative">
+                  <input
+                    id="login-password"
+                    type={showPassword ? 'text' : 'password'}
+                    name="password"
+                    className="form-input pr-11"
+                    placeholder="Enter your password"
+                    value={form.password}
+                    onChange={handleChange}
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                  >
+                    {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
+                  </button>
+                </div>
+              </div>
 
-          {/* Demo Accounts Panel */}
-          <div className="mt-10 p-5 bg-indigo-50/50 rounded-xl border border-indigo-100/60">
-            <p className="text-xs font-bold text-indigo-800 uppercase tracking-widest mb-3 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-indigo-600 animate-pulse" />
-              Demo Credentials
+              <button
+                id="login-submit-btn"
+                type="submit"
+                disabled={loading}
+                className="btn btn-primary btn-lg w-full mt-2 group"
+              >
+                {loading ? (
+                  <><Loader2 size={17} className="animate-spin" /> Signing in...</>
+                ) : (
+                  <><span>Sign In</span><ArrowRight size={17} className="group-hover:translate-x-1 transition-transform" /></>
+                )}
+              </button>
+            </form>
+          </div>
+
+          {/* Demo Credentials */}
+          <div
+            className="p-5 rounded-2xl"
+            style={{
+              background: 'rgba(255,255,255,0.80)',
+              backdropFilter: 'blur(16px)',
+              border: '1px solid rgba(219,234,254,0.60)',
+            }}
+          >
+            <p className="text-[10px] font-bold text-blue-800 uppercase tracking-widest mb-3 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+              Demo Credentials — Click to Fill
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
-              <div onClick={() => setForm({ email: 'admin@hisup.edu', password: 'admin123' })} className="bg-white px-3 py-2 rounded-lg border border-indigo-50 shadow-sm cursor-pointer hover:bg-indigo-50 transition-colors">
-                <p className="font-bold text-slate-800">Admin</p>
-                <p className="text-slate-500 text-xs">admin@hisup.edu<br/>admin123</p>
-              </div>
-              <div onClick={() => setForm({ email: 'faculty@hisup.edu', password: 'faculty123' })} className="bg-white px-3 py-2 rounded-lg border border-indigo-50 shadow-sm cursor-pointer hover:bg-indigo-50 transition-colors">
-                <p className="font-bold text-slate-800">Faculty</p>
-                <p className="text-slate-500 text-xs">faculty@hisup.edu<br/>faculty123</p>
-              </div>
-              <div onClick={() => setForm({ email: 'student@hisup.edu', password: 'student123' })} className="bg-white px-3 py-2 rounded-lg border border-indigo-50 shadow-sm cursor-pointer hover:bg-indigo-50 transition-colors">
-                <p className="font-bold text-slate-800">Student</p>
-                <p className="text-slate-500 text-xs">student@hisup.edu<br/>student123</p>
-              </div>
-              <div onClick={() => setForm({ email: 'finance@hisup.edu', password: 'finance123' })} className="bg-white px-3 py-2 rounded-lg border border-indigo-50 shadow-sm cursor-pointer hover:bg-indigo-50 transition-colors">
-                <p className="font-bold text-slate-800">Finance</p>
-                <p className="text-slate-500 text-xs">finance@hisup.edu<br/>finance123</p>
-              </div>
+            <div className="grid grid-cols-2 gap-2">
+              {DEMO_ACCOUNTS.map(({ role, email, password }) => (
+                <button
+                  key={role}
+                  type="button"
+                  onClick={() => setForm({ email, password })}
+                  className="text-left p-3 rounded-xl transition-all duration-200"
+                  style={{ background: 'rgba(239,246,255,0.70)', border: '1px solid rgba(219,234,254,0.60)' }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.background = 'rgba(219,234,254,0.70)';
+                    e.currentTarget.style.borderColor = 'rgba(147,197,253,0.60)';
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.background = 'rgba(239,246,255,0.70)';
+                    e.currentTarget.style.borderColor = 'rgba(219,234,254,0.60)';
+                  }}
+                >
+                  <p className="font-bold text-slate-800 text-sm">{role}</p>
+                  <p className="text-slate-400 text-[11px] mt-0.5">{email}</p>
+                </button>
+              ))}
             </div>
           </div>
+
+          <p className="text-center text-sm text-slate-500 mt-5">
+            Don't have an account?{' '}
+            <Link to="/register" className="text-blue-600 font-semibold hover:text-blue-800 transition-colors">
+              Register here
+            </Link>
+          </p>
         </div>
       </div>
     </div>

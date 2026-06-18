@@ -35,18 +35,36 @@ const getStudentAllotment = async (req, res) => {
   return res.status(200).json(data);
 };
 
-// Vacate Room
+// Vacate Room — Admin can vacate any, Student can only vacate their own
 const vacateRoom = async (req, res) => {
   const { allotment_id } = req.params;
-  const { data: allotment } = await supabase.from('hostel_allotments')
-    .select('room_id').eq('allotment_id', allotment_id).single();
+  const { role, id: userId } = req.user;
+
+  // Fetch allotment with student info for ownership check
+  const { data: allotment, error: fetchErr } = await supabase
+    .from('hostel_allotments')
+    .select('allotment_id, room_id, student_id, students(user_id)')
+    .eq('allotment_id', allotment_id)
+    .single();
+
+  if (fetchErr || !allotment) {
+    return res.status(404).json({ error: 'Allotment not found.' });
+  }
+
+  // Students can only vacate their own allotment
+  if (role === 'Student' && allotment.students?.user_id !== userId) {
+    return res.status(403).json({ error: 'You can only vacate your own allotment.' });
+  }
 
   const { error } = await supabase.from('hostel_allotments')
     .update({ status: 'Vacated' }).eq('allotment_id', allotment_id);
   if (error) return res.status(500).json({ error: error.message });
 
-  await supabase.from('rooms')
-    .update({ occupied: supabase.sql`occupied - 1` }).eq('room_id', allotment.room_id);
+  // Decrement occupied count
+  const { data: room } = await supabase.from('rooms').select('occupied').eq('room_id', allotment.room_id).single();
+  if (room) {
+    await supabase.from('rooms').update({ occupied: Math.max(0, (room.occupied || 1) - 1) }).eq('room_id', allotment.room_id);
+  }
 
   return res.status(200).json({ message: 'Room vacated successfully.' });
 };

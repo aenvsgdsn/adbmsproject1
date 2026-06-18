@@ -1,4 +1,3 @@
-import { Navigate } from 'react-router-dom';
 
 const Unauthorized = () => (
   <div className="min-h-screen flex items-center justify-center bg-slate-50">

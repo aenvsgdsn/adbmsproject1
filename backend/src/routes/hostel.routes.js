@@ -8,6 +8,6 @@ router.post('/add', authenticate, authorize('Admin'), addHostel);
 router.post('/rooms/add', authenticate, authorize('Admin'), addRoom);
 router.post('/allocate', authenticate, authorize('Admin'), allocateRoom);
 router.get('/student/:student_id', authenticate, getStudentAllotment);
-router.put('/vacate/:allotment_id', authenticate, authorize('Admin'), vacateRoom);
+router.put('/vacate/:allotment_id', authenticate, authorize('Admin', 'Student'), vacateRoom);
 
 module.exports = router;
