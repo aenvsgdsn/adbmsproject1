@@ -21,7 +21,7 @@ export const Card = ({ children, className = '', padding = true, hover = false }
 );
 
 /* ─── Boardto Style Project Card ──────────────────────────── */
-export const BoardtoCard = ({ iconColorClass, icon: Icon, title, subtitle, daysLeft, teamAvatars, progress }) => (
+export const BoardtoCard = ({ iconColorClass, icon: Icon, title, subtitle, daysLeft, avatars = [], progress }) => (
   <div className="card text-center p-8 flex flex-col items-center animate-slide-up h-full">
     {/* Icon */}
     <div className={`icon-circle mb-6 ${iconColorClass}`}>
@@ -46,7 +46,7 @@ export const BoardtoCard = ({ iconColorClass, icon: Icon, title, subtitle, daysL
       <div className="text-left">
         <p className="text-[10px] font-extrabold uppercase text-zinc-400 mb-2 tracking-wider">Team Member</p>
         <div className="flex -space-x-2">
-          {teamAvatars.map((url, i) => (
+          {avatars.map((url, i) => (
             <img key={i} src={url} alt="team" className="w-7 h-7 rounded-full border-2 border-white" />
           ))}
           <div className="w-7 h-7 rounded-full bg-zinc-100 border-2 border-white flex items-center justify-center text-[10px] font-bold text-zinc-400">+</div>
