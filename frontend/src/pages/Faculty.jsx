@@ -4,7 +4,7 @@ import { getFaculty, createFaculty, getDepartments } from '../api';
 import { Users, Plus, GraduationCap, Mail, Calendar, Building2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { format } from 'date-fns';
-import { PageHeader, Modal, ModalFooter, FormField, SearchBar, EmptyState, Spinner, StatCard } from '../components/UI';
+import { PageHeader, Modal, ModalFooter, FormField, SearchBar, EmptyState, Spinner, StatCard, SectionCard } from '../components/UI';
 
 const DESIGNATION_BADGE = {
   'Professor':             'badge-purple',
