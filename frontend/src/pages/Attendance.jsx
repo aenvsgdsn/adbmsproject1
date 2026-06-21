@@ -91,9 +91,9 @@ const Attendance = () => {
     if (attendanceData.length === 0) return toast.error('No students found in this section.');
     setSaving(true);
     try {
-      const records = Object.entries(markMap).map(([student_id, status]) => ({ student_id, section_id: selectedSection, date: attendanceDate, status }));
+      const records = Object.entries(markMap).map(([student_id, status]) => ({ student_id, status }));
       if (records.length === 0) return toast.error('No attendance records to save.');
-      await markAttendance({ records });
+      await markAttendance({ section_id: selectedSection, date: attendanceDate, records });
       toast.success('Attendance saved!');
     } catch (err) { toast.error(err?.response?.data?.error || 'Failed to save.'); }
     setSaving(false);

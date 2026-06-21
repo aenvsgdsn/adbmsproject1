@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { getAdminDashboard, getStudentDashboard } from '../api';
-import { Smartphone, Monitor, Layout, PieChart, ShoppingCart, Database, GraduationCap, DollarSign, BookOpen, Library, Home, TrendingUp, Calendar, Bell, Plus, MoreHorizontal, LayoutGrid, List } from 'lucide-react';
+import { getAdminDashboard, getStudentDashboard, getFacultyDashboard } from '../api';
+import { Smartphone, Monitor, Layout, PieChart, ShoppingCart, Database, GraduationCap, DollarSign, BookOpen, Library, Home, TrendingUp, Calendar, Bell, Plus, MoreHorizontal, LayoutGrid, List, Users } from 'lucide-react';
 import { format } from 'date-fns';
 import { BoardtoCard, Spinner } from '../components/UI';
 
@@ -148,16 +148,33 @@ const StudentDashboard = ({ studentId }) => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
+  const [errorMsg, setErrorMsg] = useState(null);
 
   useEffect(() => {
-    if (!studentId) return;
+    if (!studentId) {
+      setErrorMsg("Student profile not properly linked. Please contact admin.");
+      setLoading(false);
+      return;
+    }
     getStudentDashboard(studentId)
       .then(({ data }) => setStats(data))
-      .catch(() => {})
+      .catch(() => setErrorMsg("Failed to load dashboard data. Ensure your profile is fully set up."))
       .finally(() => setLoading(false));
   }, [studentId]);
 
   if (loading) return <Spinner />;
+
+  if (errorMsg || !stats) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 text-center animate-fade-in-up">
+        <div className="icon-circle icon-red w-16 h-16 mx-auto mb-4">
+          <TrendingUp size={28} />
+        </div>
+        <h3 className="text-xl font-bold text-zinc-900 mb-2">Dashboard Unavailable</h3>
+        <p className="text-zinc-500 max-w-sm mx-auto text-sm">{errorMsg || "No data available."}</p>
+      </div>
+    );
+  }
 
   const cards = [
     {
@@ -211,6 +228,82 @@ const StudentDashboard = ({ studentId }) => {
 };
 
 
+/* ─── Faculty Dashboard (Boardto Layout) ──────────────────── */
+const FacultyDashboard = ({ facultyId }) => {
+  const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState('all');
+  const [errorMsg, setErrorMsg] = useState(null);
+
+  useEffect(() => {
+    if (!facultyId) {
+      setErrorMsg("Faculty profile not properly linked. Please contact admin.");
+      setLoading(false);
+      return;
+    }
+    getFacultyDashboard(facultyId)
+      .then(({ data }) => setStats(data))
+      .catch(() => setErrorMsg("Failed to load dashboard data."))
+      .finally(() => setLoading(false));
+  }, [facultyId]);
+
+  if (loading) return <Spinner />;
+
+  if (errorMsg || !stats) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 text-center animate-fade-in-up">
+        <div className="icon-circle icon-red w-16 h-16 mx-auto mb-4">
+          <Monitor size={28} />
+        </div>
+        <h3 className="text-xl font-bold text-zinc-900 mb-2">Dashboard Unavailable</h3>
+        <p className="text-zinc-500 max-w-sm mx-auto text-sm">{errorMsg || "No data available."}</p>
+      </div>
+    );
+  }
+
+  const cards = [
+    {
+      title: 'Assigned Courses',
+      subtitle: `${stats.assigned_courses || 0} Sections`,
+      icon: BookOpen,
+      iconColorClass: 'icon-blue',
+      daysLeft: 'Current Semester',
+      progress: Math.min(100, Math.round(((stats.assigned_courses || 0) / 5) * 100)) || 0,
+      avatars: ['https://i.pravatar.cc/100?img=11'],
+    },
+    {
+      title: 'Total Students',
+      subtitle: 'Enrolled in your classes',
+      icon: Users,
+      iconColorClass: 'icon-green',
+      daysLeft: 'Active',
+      progress: Math.min(100, Math.round(((stats.total_students || 0) / 200) * 100)) || 0,
+      avatars: ['https://i.pravatar.cc/100?img=12', 'https://i.pravatar.cc/100?img=13'],
+    },
+    {
+      title: 'Department',
+      subtitle: stats.department_name || 'N/A',
+      icon: Layout,
+      iconColorClass: 'icon-purple',
+      daysLeft: stats.designation || 'Faculty',
+      progress: 100,
+      avatars: ['https://i.pravatar.cc/100?img=14'],
+    }
+  ];
+
+  return (
+    <div>
+      <FilterRow activeFilter={filter} setActiveFilter={setFilter} total={3} />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {cards.map((card, i) => (
+          <BoardtoCard key={i} {...card} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+
 /* ─── Dashboard Header & Layout ───────────────────────────── */
 const Dashboard = () => {
   const { user } = useAuth();
@@ -230,12 +323,13 @@ const Dashboard = () => {
 
       {user?.role === 'Admin' && <AdminDashboard />}
       {user?.role === 'Student' && <StudentDashboard studentId={user?.student_id} />}
+      {user?.role === 'Faculty' && <FacultyDashboard facultyId={user?.faculty_id} />}
       
-      {/* Other Roles (Faculty/Finance) */}
-      {(user?.role === 'Faculty' || user?.role === 'Finance') && (
+      {/* Other Roles (Finance) */}
+      {user?.role === 'Finance' && (
         <div className="text-center py-20 animate-fade-in-up">
           <div className="icon-circle icon-cyan w-16 h-16 mx-auto mb-4">
-            <GraduationCap size={28} />
+            <DollarSign size={28} />
           </div>
           <h3 className="text-xl font-bold text-zinc-900 mb-2">{user?.role} Portal</h3>
           <p className="text-zinc-500 max-w-sm mx-auto text-sm">Use the sidebar to navigate to your specific modules.</p>

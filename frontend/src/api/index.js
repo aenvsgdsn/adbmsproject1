@@ -95,6 +95,7 @@ export const vacateRoom = (id) => API.put(`/hostel/vacate/${id}`);
 // Dashboard / Notifications
 export const getAdminDashboard = () => API.get('/dashboard/admin');
 export const getStudentDashboard = (id) => API.get(`/dashboard/student/${id}`);
+export const getFacultyDashboard = (id) => API.get(`/dashboard/faculty/${id}`);
 export const getNotifications = () => API.get('/dashboard/notifications');
 export const markNotificationRead = (id) => API.put(`/dashboard/notifications/${id}/read`);
 export const markAllNotificationsRead = () => API.put('/dashboard/notifications/read-all');

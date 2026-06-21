@@ -51,4 +51,13 @@ const getStudentDashboard = async (req, res) => {
   return res.status(200).json(data);
 };
 
-module.exports = { getNotifications, markRead, markAllRead, getAuditLogs, getAdminDashboard, getStudentDashboard };
+// Get Faculty Dashboard
+const getFacultyDashboard = async (req, res) => {
+  const { faculty_id } = req.params;
+  const { data, error } = await supabase.from('vw_faculty_dashboard')
+    .select('*').eq('faculty_id', faculty_id).single();
+  if (error) return res.status(500).json({ error: error.message });
+  return res.status(200).json(data);
+};
+
+module.exports = { getNotifications, markRead, markAllRead, getAuditLogs, getAdminDashboard, getStudentDashboard, getFacultyDashboard };
