@@ -110,3 +110,57 @@ export const Spinner = ({ size = 28 }) => (
     <Loader2 size={size} className="animate-spin text-cyan-500" />
   </div>
 );
+
+export const SectionCard = ({ title, actions, children, className = '' }) => (
+  <section className={`section-card bg-white rounded-3xl shadow-sm border border-zinc-100 overflow-hidden ${className}`}>
+    {(title || actions) && (
+      <div className="px-6 py-5 border-b border-zinc-100 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+        {title ? <h2 className="text-lg font-bold text-slate-900">{title}</h2> : <div />}
+        {actions && <div className="flex items-center gap-2">{actions}</div>}
+      </div>
+    )}
+    <div className="p-6">{children}</div>
+  </section>
+);
+
+export const TableWrapper = ({ children, className = '' }) => (
+  <div className={`overflow-x-auto rounded-3xl border border-zinc-100 ${className}`}>
+    <table className="min-w-full text-left text-sm text-slate-600">{children}</table>
+  </div>
+);
+
+export const EmptyState = ({ icon: Icon, title, subtitle }) => (
+  <div className="flex flex-col items-center justify-center gap-3 py-16 text-center text-zinc-500">
+    {Icon && <Icon size={36} className="text-cyan-500" />}
+    <div>
+      <h3 className="text-lg font-semibold text-slate-800">{title}</h3>
+      {subtitle && <p className="text-sm text-zinc-500 mt-2">{subtitle}</p>}
+    </div>
+  </div>
+);
+
+export const Modal = ({ title, children, onClose, maxWidth = 'max-w-xl' }) => (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+    <div className={`w-full ${maxWidth} bg-white rounded-3xl shadow-2xl overflow-hidden`}>
+      <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-100">
+        <h3 className="text-lg font-bold text-slate-900">{title}</h3>
+        <button type="button" onClick={onClose} className="text-zinc-400 hover:text-slate-700 transition">
+          <X size={20} />
+        </button>
+      </div>
+      <div className="p-6">{children}</div>
+    </div>
+  </div>
+);
+
+export const ModalFooter = ({ onCancel, submitLabel, loading = false, icon: Icon }) => (
+  <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end sm:items-center mt-4">
+    <button type="button" onClick={onCancel} className="btn btn-secondary w-full sm:w-auto">
+      Cancel
+    </button>
+    <button type="submit" className="btn btn-primary w-full sm:w-auto flex items-center justify-center gap-2" disabled={loading}>
+      {loading ? <Loader2 size={16} className="animate-spin" /> : Icon ? <Icon size={16} /> : null}
+      {submitLabel}
+    </button>
+  </div>
+);
