@@ -1,254 +1,209 @@
 import { Link } from 'react-router-dom';
+import { ArrowRight, BookOpen, Users, Calendar, DollarSign, Library, GraduationCap, Shield, Zap, Globe, LayoutDashboard } from 'lucide-react';
 
-/* ── HiSUP Nav Links ── */
 const NAV_LINKS = [
-  { label: 'Home', href: '#home' },
-  { label: 'Explore Features', href: '#explore' },
-  { label: 'About HiSUP', href: '#about' },
+  { label: 'Overview', href: '#home' },
+  { label: 'Modules', href: '#modules' },
+  { label: 'Why HiSUP', href: '#about' },
 ];
 
 const LandingPage = () => {
   return (
-    <div className="min-h-screen font-inter overflow-hidden bg-[#07193f]">
-
-      {/* ══════════════════════════════════════════════════════
-           NAVBAR (HiSUP)
-      ══════════════════════════════════════════════════════ */}
-      <nav className="absolute top-0 inset-x-0 z-50">
-        <div className="flex items-center justify-between px-6 md:px-10 h-24">
-          
-          {/* Logo */}
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-black rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(0,180,216,0.3)] border border-cyan-500/30">
-              <span className="text-white font-extrabold text-xl tracking-tighter">
-                H
-              </span>
+    <div className="min-h-screen bg-[#030b1c] text-slate-200 selection:bg-cyan-500/30 font-inter">
+      
+      {/* ────────────────────────────────────────────────────────
+          NAVBAR
+      ──────────────────────────────────────────────────────── */}
+      <nav className="fixed top-0 inset-x-0 z-50 transition-all duration-300 bg-[#030b1c]/70 backdrop-blur-md border-b border-white/5">
+        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+          <div className="flex items-center gap-3 group cursor-pointer">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center shadow-[0_0_20px_rgba(34,211,238,0.4)] group-hover:shadow-[0_0_30px_rgba(34,211,238,0.6)] transition-all duration-300">
+              <span className="text-white font-black text-xl">H</span>
             </div>
-            <div className="flex flex-col">
-              <span className="font-bold text-xl text-white leading-tight tracking-tight">HiSUP</span>
-              <span className="text-[12px] text-zinc-400 font-medium tracking-wide">HITEC University</span>
+            <div>
+              <h1 className="font-bold text-xl text-white tracking-tight leading-none">HiSUP</h1>
+              <p className="text-[10px] text-cyan-400 font-semibold tracking-widest uppercase mt-0.5">Smart Portal</p>
             </div>
           </div>
 
-          {/* Center links - INCREASED SIZE */}
-          <div className="hidden lg:flex items-center gap-8">
-            {NAV_LINKS.map(({ label, href }, idx) => (
-              <a key={label} href={href}
-                className={`text-[15px] font-bold flex items-center gap-1 transition-colors duration-200 ${idx === 0 ? 'text-cyan-400' : 'text-zinc-300 hover:text-white'}`}>
-                {label}
+          <div className="hidden md:flex items-center gap-8">
+            {NAV_LINKS.map(link => (
+              <a key={link.label} href={link.href} className="text-sm font-medium text-slate-400 hover:text-cyan-400 transition-colors">
+                {link.label}
               </a>
             ))}
           </div>
 
-          {/* Access Portal CTA - INCREASED SIZE */}
           <Link
             to="/login"
-            className="flex items-center justify-center text-[16px] font-bold text-white px-8 py-3.5 rounded-full transition-all duration-300 hover:scale-105"
-            style={{
-              background: '#00b4d8',
-              boxShadow: '0 4px 20px rgba(0,180,216,0.4)',
-            }}
+            className="group relative inline-flex items-center justify-center gap-2 px-6 py-2.5 text-sm font-bold text-white bg-white/5 border border-white/10 rounded-full hover:bg-white/10 hover:border-cyan-400/50 transition-all duration-300 overflow-hidden"
           >
-            Access Portal
+            <span className="relative z-10">Access Portal</span>
+            <ArrowRight size={16} className="relative z-10 group-hover:translate-x-1 transition-transform" />
+            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/0 via-cyan-500/10 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-x-[-100%] group-hover:translate-x-[100%]" />
           </Link>
         </div>
       </nav>
 
-      {/* ══════════════════════════════════════════════════════
-           HERO SECTION (HiSUP)
-      ══════════════════════════════════════════════════════ */}
-      <section
-        id="home"
-        className="relative min-h-screen flex items-center pt-20"
-      >
+      {/* ────────────────────────────────────────────────────────
+          HERO SECTION
+      ──────────────────────────────────────────────────────── */}
+      <section id="home" className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
         {/* Background Image */}
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 z-0"
           style={{
             backgroundImage: "url('/mtech-bg.png')",
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            opacity: 1,
+            backgroundAttachment: 'fixed'
           }}
         />
+        
+        {/* Overlay Gradients */}
+        <div className="absolute inset-0 z-0 bg-[#030b1c]/80 backdrop-blur-[2px]" />
+        <div className="absolute inset-0 z-0 bg-gradient-to-t from-[#030b1c] via-transparent to-[#030b1c]/50" />
+        <div className="absolute inset-0 z-0 bg-gradient-to-r from-[#030b1c] via-transparent to-[#030b1c]" />
 
-        {/* Deep gradient overlay */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background: 'linear-gradient(to right, rgba(7,25,63,0.95) 0%, rgba(7,25,63,0.60) 50%, rgba(7,25,63,0.10) 100%)',
-          }}
-        />
-
-        {/* Hero content */}
-        <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 w-full">
-          <div className="max-w-2xl">
-            
-            {/* Top Badge */}
-            <div className="inline-flex items-center px-4 py-1.5 rounded-full mb-8"
-              style={{ background: 'rgba(0,180,216,0.15)', border: '1px solid rgba(0,180,216,0.3)' }}>
-              <span className="text-[12px] font-extrabold uppercase tracking-widest text-[#00b4d8]">
-                WELCOME TO HISUP
-              </span>
-            </div>
-
-            <h1 className="text-5xl md:text-6xl font-extrabold text-white leading-[1.1] tracking-tight mb-6 animate-fade-in-up">
-              HITEC Smart <br />
-              <span className="text-[#00b4d8]">University Portal</span>
-            </h1>
-
-            <p className="text-[18px] text-blue-100/80 max-w-lg mb-10 leading-[1.8] font-medium animate-fade-in-up"
-              style={{ animationDelay: '0.1s' }}>
-              A centralized digital platform designed to streamline academic, administrative, and student services at HITEC University. Access resources through a modern, secure, and intelligent web-based system.
-            </p>
-
-            {/* Actions - INCREASED SIZE */}
-            <div className="flex flex-wrap items-center gap-4 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-              <Link
-                to="/login"
-                className="inline-flex items-center justify-center font-bold text-white px-10 py-4 rounded-xl text-[17px] transition-all duration-300 hover:-translate-y-1"
-                style={{
-                  background: '#00b4d8',
-                  boxShadow: '0 8px 25px rgba(0,180,216,0.3)',
-                }}
-              >
-                Access Portal
-              </Link>
-            </div>
-
-          </div>
-        </div>
-
-        {/* Bottom wave decorative element */}
-        <div className="absolute bottom-0 inset-x-0 pointer-events-none" style={{ lineHeight: 0 }}>
-          <svg viewBox="0 0 1440 80" className="w-full h-[60px] md:h-[80px]" preserveAspectRatio="none">
-            <path d="M0,80 L0,40 C240,60 480,20 720,40 C960,60 1200,20 1440,30 L1440,80 Z" fill="#ffffff" />
-          </svg>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════
-           EXPLORE FEATURES SECTION
-      ══════════════════════════════════════════════════════ */}
-      <section id="explore" className="py-24 bg-white relative">
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-4xl font-extrabold text-[#07193f] mb-4">Core Modules</h2>
-            <p className="text-lg text-zinc-600">
-              Transforming University Operations Through Technology
-            </p>
-          </div>
+        <div className="relative z-10 max-w-5xl mx-auto px-6 text-center flex flex-col items-center mt-10">
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Feature 1 */}
-            <div className="bg-zinc-50 rounded-2xl p-8 border border-zinc-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-              <div className="w-12 h-12 rounded-xl bg-cyan-100 text-cyan-600 flex items-center justify-center mb-6">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-              </div>
-              <h3 className="text-xl font-bold text-[#07193f] mb-3">Student Management</h3>
-              <p className="text-zinc-600 leading-relaxed">Manage student profiles, academic records, enrollment information, attendance, and performance history.</p>
-            </div>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/20 backdrop-blur-md mb-8 animate-fade-in-up">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+            </span>
+            <span className="text-xs font-bold uppercase tracking-wider text-cyan-400">Welcome to the Future of Education</span>
+          </div>
 
-            {/* Feature 2 */}
-            <div className="bg-zinc-50 rounded-2xl p-8 border border-zinc-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-              <div className="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center mb-6">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
-              </div>
-              <h3 className="text-xl font-bold text-[#07193f] mb-3">Course Registration</h3>
-              <p className="text-zinc-600 leading-relaxed">Enable students to browse available courses, register online, and monitor enrollment status.</p>
-            </div>
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-[1.05] mb-8 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+            HITEC Smart <br/>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500">
+              University Portal
+            </span>
+          </h1>
 
-            {/* Feature 3 */}
-            <div className="bg-zinc-50 rounded-2xl p-8 border border-zinc-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-              <div className="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center mb-6">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              </div>
-              <h3 className="text-xl font-bold text-[#07193f] mb-3">Faculty Management</h3>
-              <p className="text-zinc-600 leading-relaxed">Maintain faculty profiles, department assignments, teaching schedules, and workload management.</p>
-            </div>
+          <p className="text-lg md:text-xl text-slate-400 max-w-2xl mb-12 leading-relaxed animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+            A unified digital ecosystem seamlessly connecting students, faculty, and administration through a modern, intelligent web platform.
+          </p>
 
-            {/* Feature 4 */}
-            <div className="bg-zinc-50 rounded-2xl p-8 border border-zinc-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-              <div className="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center mb-6">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-              </div>
-              <h3 className="text-xl font-bold text-[#07193f] mb-3">Fee Management</h3>
-              <p className="text-zinc-600 leading-relaxed">Track fee structures, payment histories, pending dues, and financial reports efficiently.</p>
-            </div>
+          <div className="flex flex-col sm:flex-row items-center gap-5 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+            <Link
+              to="/login"
+              className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold rounded-2xl shadow-[0_0_30px_rgba(6,182,212,0.3)] hover:shadow-[0_0_40px_rgba(6,182,212,0.5)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3"
+            >
+              <LayoutDashboard size={20} />
+              Login to Dashboard
+            </Link>
+            <a
+              href="#modules"
+              className="w-full sm:w-auto px-8 py-4 bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold rounded-2xl backdrop-blur-md transition-all duration-300 flex items-center justify-center gap-3"
+            >
+              Explore Modules
+            </a>
+          </div>
+        </div>
 
-            {/* Feature 5 */}
-            <div className="bg-zinc-50 rounded-2xl p-8 border border-zinc-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-              <div className="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center mb-6">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-              </div>
-              <h3 className="text-xl font-bold text-[#07193f] mb-3">Library Services</h3>
-              <p className="text-zinc-600 leading-relaxed">Manage book inventories, issue and return records, overdue tracking, and library memberships.</p>
-            </div>
+        {/* Decorative Grid Lines */}
+        <div className="absolute inset-0 z-0 pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)', backgroundSize: '4rem 4rem' }} />
+      </section>
 
-            {/* Feature 6 */}
-            <div className="bg-zinc-50 rounded-2xl p-8 border border-zinc-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-              <div className="w-12 h-12 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center mb-6">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      {/* ────────────────────────────────────────────────────────
+          MODULES SECTION
+      ──────────────────────────────────────────────────────── */}
+      <section id="modules" className="py-32 relative">
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <div className="text-center max-w-3xl mx-auto mb-20">
+            <h2 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight">Ecosystem Modules</h2>
+            <p className="text-slate-400 text-lg">Comprehensive tools designed to transform and streamline every aspect of university operations.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              { icon: Users, title: 'Student Management', color: 'from-blue-500 to-blue-600', desc: 'Centralized profiles, enrollment history, and academic tracking.' },
+              { icon: BookOpen, title: 'Course Registration', color: 'from-indigo-500 to-indigo-600', desc: 'Seamless online registration, capacity monitoring, and prerequisites.' },
+              { icon: GraduationCap, title: 'Faculty & Departments', color: 'from-purple-500 to-purple-600', desc: 'Manage teaching assignments, departmental structures, and faculty roles.' },
+              { icon: DollarSign, title: 'Financial Center', color: 'from-emerald-500 to-emerald-600', desc: 'Fee structures, payment verification, and revenue analytics.' },
+              { icon: Library, title: 'Smart Library', color: 'from-amber-500 to-amber-600', desc: 'Digital catalog, issue tracking, and automated due date monitoring.' },
+              { icon: Calendar, title: 'Results & Grading', color: 'from-rose-500 to-rose-600', desc: 'Faculty grade uploads, GPA calculations, and student transcripts.' },
+            ].map((mod, i) => (
+              <div key={i} className="group relative p-8 rounded-3xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.04] hover:border-white/10 transition-all duration-500 overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br opacity-20 blur-[50px] group-hover:opacity-40 transition-opacity duration-500 rounded-full translate-x-1/2 -translate-y-1/2" />
+                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${mod.color} flex items-center justify-center shadow-lg mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500`}>
+                  <mod.icon size={26} className="text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-3">{mod.title}</h3>
+                <p className="text-slate-400 leading-relaxed text-sm">{mod.desc}</p>
               </div>
-              <h3 className="text-xl font-bold text-[#07193f] mb-3">Result Management</h3>
-              <p className="text-zinc-600 leading-relaxed">Facilitate grade submission, transcript generation, GPA calculation, and academic reporting.</p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════
-           ABOUT SECTION
-      ══════════════════════════════════════════════════════ */}
-      <section id="about" className="py-24 bg-[#07193f] relative overflow-hidden">
-        {/* Background ambient light */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/10 rounded-full blur-[100px] pointer-events-none" />
-
-        <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center gap-16">
+      {/* ────────────────────────────────────────────────────────
+          WHY HISUP SECTION
+      ──────────────────────────────────────────────────────── */}
+      <section id="about" className="py-32 relative border-t border-white/5 bg-[#020713]">
+        <div className="max-w-7xl mx-auto px-6 relative z-10 flex flex-col lg:flex-row items-center gap-16">
           <div className="flex-1">
-            <div className="inline-flex items-center px-4 py-1.5 rounded-full mb-6"
-              style={{ background: 'rgba(0,180,216,0.15)', border: '1px solid rgba(0,180,216,0.3)' }}>
-              <span className="text-[12px] font-extrabold uppercase tracking-widest text-[#00b4d8]">
-                ABOUT HISUP
-              </span>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-extrabold text-white leading-tight mb-8">
-              Why Choose <span className="text-[#00b4d8]">HiSUP?</span>
-            </h2>
-            <p className="text-lg text-blue-100/80 leading-relaxed mb-8">
-              The HITEC Smart University Portal (HiSUP) is a comprehensive university management solution developed to digitize and automate essential academic and administrative processes. The platform enhances efficiency, transparency, and accessibility by integrating multiple university services into a single secure system.
+            <h2 className="text-4xl md:text-5xl font-black text-white mb-8 tracking-tight">Built for <br/><span className="text-cyan-400">Excellence.</span></h2>
+            <p className="text-slate-400 text-lg leading-relaxed mb-8">
+              HiSUP replaces fragmented legacy systems with a single, cohesive interface. It is architected for speed, reliability, and security, ensuring that students and faculty can focus on what truly matters: education.
             </p>
-            <p className="text-lg text-blue-100/80 leading-relaxed">
-              Whether you are a student registering for courses, a faculty member managing grades, or an administrator overseeing university operations, HiSUP provides an intuitive and seamless experience.
-            </p>
+            <ul className="space-y-4">
+              {[
+                { icon: Shield, title: 'Enterprise-Grade Security', text: 'Role-based access control and encrypted data storage.' },
+                { icon: Zap, title: 'Lightning Fast', text: 'Optimized performance for thousands of concurrent users.' },
+                { icon: Globe, title: 'Cloud Native', text: 'Accessible from anywhere, on any device, at any time.' }
+              ].map((item, i) => (
+                <li key={i} className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-cyan-500/10 flex items-center justify-center shrink-0 border border-cyan-500/20">
+                    <item.icon size={18} className="text-cyan-400" />
+                  </div>
+                  <div>
+                    <h4 className="text-white font-bold">{item.title}</h4>
+                    <p className="text-slate-400 text-sm">{item.text}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
           </div>
-          
-          <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
-            {/* Value Props */}
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
-              <h4 className="text-white font-bold text-lg mb-2">Secure</h4>
-              <p className="text-sm text-blue-100/60 leading-relaxed">Advanced authentication and role-based authorization ensure data protection and privacy.</p>
-            </div>
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
-              <h4 className="text-white font-bold text-lg mb-2">Efficient</h4>
-              <p className="text-sm text-blue-100/60 leading-relaxed">Automates repetitive administrative tasks and reduces paperwork.</p>
-            </div>
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
-              <h4 className="text-white font-bold text-lg mb-2">Accessible</h4>
-              <p className="text-sm text-blue-100/60 leading-relaxed">Available anytime and anywhere through an internet-connected device.</p>
-            </div>
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
-              <h4 className="text-white font-bold text-lg mb-2">Integrated</h4>
-              <p className="text-sm text-blue-100/60 leading-relaxed">Combines all university operations into a single centralized platform.</p>
+          <div className="flex-1 relative w-full aspect-square max-w-lg mx-auto">
+            <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/20 to-blue-600/20 rounded-full blur-[100px] animate-pulse" />
+            <div className="relative h-full w-full bg-white/5 border border-white/10 rounded-[2.5rem] backdrop-blur-sm p-8 shadow-2xl flex flex-col overflow-hidden">
+               {/* Mockup UI Window */}
+               <div className="flex gap-2 mb-8">
+                 <div className="w-3 h-3 rounded-full bg-rose-500" />
+                 <div className="w-3 h-3 rounded-full bg-amber-500" />
+                 <div className="w-3 h-3 rounded-full bg-emerald-500" />
+               </div>
+               <div className="space-y-4 flex-1">
+                 <div className="h-8 w-1/3 bg-white/10 rounded-lg animate-pulse" />
+                 <div className="h-4 w-full bg-white/5 rounded-full" />
+                 <div className="h-4 w-5/6 bg-white/5 rounded-full" />
+                 <div className="h-4 w-4/6 bg-white/5 rounded-full mb-8" />
+                 
+                 <div className="grid grid-cols-2 gap-4">
+                   <div className="h-24 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-2xl border border-white/5" />
+                   <div className="h-24 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-2xl border border-white/5" />
+                 </div>
+               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-[#05112a] border-t border-white/10 py-8">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 text-center">
-          <p className="text-sm text-zinc-500 font-medium">
+      {/* ────────────────────────────────────────────────────────
+          FOOTER
+      ──────────────────────────────────────────────────────── */}
+      <footer className="border-t border-white/5 bg-[#030b1c] py-12">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-2 opacity-50">
+            <div className="w-6 h-6 rounded bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center">
+              <span className="text-white font-black text-xs">H</span>
+            </div>
+            <span className="font-bold text-sm text-white tracking-tight">HiSUP</span>
+          </div>
+          <p className="text-slate-500 text-sm font-medium">
             © {new Date().getFullYear()} HITEC University. All rights reserved.
           </p>
         </div>
