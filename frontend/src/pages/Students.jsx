@@ -148,7 +148,10 @@ const Students = () => {
                 <input className="form-input" required value={form.roll_number} onChange={e => setForm({ ...form, roll_number: e.target.value })} />
               </FormField>
               <FormField label="Email Address">
-                <input type="email" className="form-input md:col-span-2" required value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} />
+                <input type="email" className="form-input" required value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} />
+              </FormField>
+              <FormField label="Password">
+                <input type="text" className="form-input" required value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} />
               </FormField>
               <FormField label="CNIC">
                 <input className="form-input" required value={form.cnic} onChange={e => setForm({ ...form, cnic: e.target.value })} />
