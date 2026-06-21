@@ -145,19 +145,22 @@ const Courses = () => {
       <PageHeader
         title="Academic Courses"
         subtitle="Explore our diverse catalog of programs and course sections"
-        actions={canEdit && (
-          <>
-            <button onClick={() => setShowSectionModal(true)} className="btn btn-secondary"><Users size={15} /> Add Section</button>
-            <button onClick={() => setShowCourseModal(true)} className="btn btn-primary"><Plus size={15} /> Add Course</button>
-          </>
-        )}
       />
 
-      {/* Tabs */}
-      <div className="flex gap-1.5 p-1.5 rounded-xl w-fit mb-7"
-        style={{ background: 'rgba(239,246,255,0.70)', border: '1px solid rgba(219,234,254,0.60)' }}>
-        {TAB_BTN('courses', `Catalog (${courses.length})`, LayoutGrid)}
-        {TAB_BTN('sections', `Sections (${sections.length})`, LayoutList)}
+      <div className="card mb-7 p-4 bg-white rounded-2xl shadow-sm border border-zinc-100">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="flex gap-1.5 p-1.5 rounded-xl w-full md:w-fit overflow-x-auto"
+            style={{ background: 'rgba(239,246,255,0.70)', border: '1px solid rgba(219,234,254,0.60)' }}>
+            {TAB_BTN('courses', `Catalog (${courses.length})`, LayoutGrid)}
+            {TAB_BTN('sections', `Sections (${sections.length})`, LayoutList)}
+          </div>
+          {canEdit && (
+            <div className="flex gap-3 w-full md:w-auto">
+              <button onClick={() => setShowSectionModal(true)} className="btn btn-secondary w-full md:w-auto"><Users size={15} /> Add Section</button>
+              <button onClick={() => setShowCourseModal(true)} className="btn btn-primary w-full md:w-auto"><Plus size={15} /> Add Course</button>
+            </div>
+          )}
+        </div>
       </div>
 
       {loading ? <Spinner /> : activeTab === 'courses' ? (

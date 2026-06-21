@@ -69,23 +69,21 @@ const Students = () => {
       <PageHeader
         title="Student Directory"
         subtitle={`${students.length} students currently enrolled across all programs`}
-        actions={
-          <button id="add-student-btn" onClick={() => setShowModal(true)} className="btn btn-primary">
-            <Plus size={15} /> Add Student
-          </button>
-        }
       />
 
       <SectionCard
-        title={null}
+        title="Student Directory"
         actions={
-          <div className="p-4 w-full">
+          <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
             <SearchBar
               id="student-search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search by name or roll number..."
             />
+            <button id="add-student-btn" onClick={() => setShowModal(true)} className="btn btn-primary shrink-0">
+              <Plus size={15} /> Add Student
+            </button>
           </div>
         }
       >

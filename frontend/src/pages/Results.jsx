@@ -80,11 +80,6 @@ const Results = () => {
       <PageHeader
         title="Results & Grades"
         subtitle={isFaculty ? 'Upload and manage grades for your sections.' : 'Your academic performance and grade history.'}
-        actions={isFaculty && selectedSection && (
-          <button onClick={() => setShowGradeModal(true)} className="btn btn-primary">
-            <Upload size={15} /> Upload Grades
-          </button>
-        )}
       />
 
       {/* Faculty View */}
@@ -101,7 +96,14 @@ const Results = () => {
           </div>
 
           {selectedSection && (
-            <SectionCard title="Student Grades">
+            <SectionCard 
+              title="Student Grades"
+              actions={
+                <button onClick={() => setShowGradeModal(true)} className="btn btn-primary shrink-0">
+                  <Upload size={15} /> Upload Grades
+                </button>
+              }
+            >
               <TableWrapper>
                 <thead>
                   <tr>

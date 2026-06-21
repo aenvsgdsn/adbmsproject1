@@ -120,23 +120,25 @@ const LibraryPage = () => {
       <PageHeader
         title="University Library"
         subtitle="Browse our extensive collection of educational resources"
-        actions={isAdmin && (
-          <button onClick={() => setShowAddModal(true)} className="btn btn-primary">
-            <Plus size={15} /> Add Book
-          </button>
-        )}
       />
 
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-7">
-        <div className="flex gap-1.5 p-1.5 rounded-xl w-fit" style={{ background: 'rgba(239,246,255,0.70)', border: '1px solid rgba(219,234,254,0.60)' }}>
-          {TAB_BTN('catalog', `Catalog (${books.length})`, LayoutGrid)}
-          {(isStudent || isFaculty) && TAB_BTN('my-books', `My Issues (${myBooks.filter(b => b.status === 'Issued').length})`, BookOpen)}
-        </div>
-        {activeTab === 'catalog' && (
-          <div className="w-full sm:w-72">
-            <SearchBar value={search} onChange={e => setSearch(e.target.value)} placeholder="Search catalog..." />
+      <div className="card mb-7 p-4 bg-white rounded-2xl shadow-sm border border-zinc-100">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex gap-1.5 p-1.5 rounded-xl w-fit overflow-x-auto" style={{ background: 'rgba(239,246,255,0.70)', border: '1px solid rgba(219,234,254,0.60)' }}>
+            {TAB_BTN('catalog', `Catalog (${books.length})`, LayoutGrid)}
+            {(isStudent || isFaculty) && TAB_BTN('my-books', `My Issues (${myBooks.filter(b => b.status === 'Issued').length})`, BookOpen)}
           </div>
-        )}
+          <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+            {activeTab === 'catalog' && (
+              <SearchBar value={search} onChange={e => setSearch(e.target.value)} placeholder="Search catalog..." />
+            )}
+            {isAdmin && (
+              <button onClick={() => setShowAddModal(true)} className="btn btn-primary shrink-0 w-full sm:w-auto">
+                <Plus size={15} /> Add Book
+              </button>
+            )}
+          </div>
+        </div>
       </div>
 
       {loading ? <Spinner /> : activeTab === 'catalog' ? (

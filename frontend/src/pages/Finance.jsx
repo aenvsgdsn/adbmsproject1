@@ -73,16 +73,6 @@ const Finance = () => {
       <PageHeader
         title="Financial Center"
         subtitle="Manage fees, monitor transactions, and process payment verifications"
-        actions={isFinance && (
-          <>
-            <button id="assign-fee-btn" onClick={() => setShowAssignModal(true)} className="btn btn-secondary">
-              <Users size={15} /> Assign Fee
-            </button>
-            <button id="add-fee-structure-btn" onClick={() => setShowFeeModal(true)} className="btn btn-primary">
-              <Plus size={15} /> Fee Structure
-            </button>
-          </>
-        )}
       />
 
       {/* Stats */}
@@ -96,7 +86,15 @@ const Finance = () => {
       )}
 
       {/* Payments Table */}
-      <SectionCard title="Pending Verifications" className="mb-7">
+      <SectionCard 
+        title="Pending Verifications" 
+        className="mb-7"
+        actions={isFinance && (
+          <button id="assign-fee-btn" onClick={() => setShowAssignModal(true)} className="btn btn-secondary shrink-0">
+            <Users size={15} /> Assign Fee
+          </button>
+        )}
+      >
         {loading ? <Spinner /> : (
           <TableWrapper>
             <thead>
@@ -124,11 +122,11 @@ const Finance = () => {
                   {isFinance && (
                     <td className="text-right">
                       {p.status === 'Pending' ? (
-                        <div className="flex gap-2 justify-end">
-                          <button id={`approve-${p.payment_id}`} onClick={() => handleApprove(p.payment_id)} className="btn btn-success btn-sm">
+                        <div className="grid grid-cols-2 gap-2 w-full max-w-[200px] ml-auto">
+                          <button id={`approve-${p.payment_id}`} onClick={() => handleApprove(p.payment_id)} className="btn bg-emerald-500 hover:bg-emerald-600 text-white w-full py-1.5 px-2 rounded-lg text-xs font-bold justify-center">
                             <CheckCircle size={13} /> Approve
                           </button>
-                          <button id={`reject-${p.payment_id}`} onClick={() => handleReject(p.payment_id)} className="btn btn-danger btn-sm">
+                          <button id={`reject-${p.payment_id}`} onClick={() => handleReject(p.payment_id)} className="btn bg-rose-500 hover:bg-rose-600 text-white w-full py-1.5 px-2 rounded-lg text-xs font-bold justify-center">
                             <XCircle size={13} /> Reject
                           </button>
                         </div>
@@ -144,7 +142,14 @@ const Finance = () => {
 
       {/* Fee Structures */}
       {isFinance && (
-        <SectionCard title="Active Fee Structures">
+        <SectionCard 
+          title="Active Fee Structures"
+          actions={
+            <button id="add-fee-structure-btn" onClick={() => setShowFeeModal(true)} className="btn btn-primary shrink-0">
+              <Plus size={15} /> Fee Structure
+            </button>
+          }
+        >
           {loading ? <Spinner /> : (
             <TableWrapper>
               <thead>

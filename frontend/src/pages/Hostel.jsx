@@ -90,13 +90,6 @@ const Hostel = () => {
       <PageHeader
         title="Hostel & Housing"
         subtitle="Manage residential facilities, rooms, and student allotments"
-        actions={isAdmin && (
-          <>
-            <button onClick={() => setShowAllocateModal(true)} className="btn btn-secondary"><Users size={15} /> Allocate</button>
-            <button onClick={() => setShowRoomModal(true)} className="btn btn-secondary"><Plus size={15} /> Add Room</button>
-            <button onClick={() => setShowHostelModal(true)} className="btn btn-primary"><Building2 size={15} /> Add Hostel</button>
-          </>
-        )}
       />
 
       {isStudent && (
@@ -142,9 +135,18 @@ const Hostel = () => {
 
       {isAdmin && (
         <>
-          <div className="flex gap-1.5 p-1.5 rounded-xl w-fit mb-7" style={{ background: 'rgba(239,246,255,0.70)', border: '1px solid rgba(219,234,254,0.60)' }}>
-            {TAB_BTN('hostels', `Overview (${hostels.length})`, Building2)}
-            {TAB_BTN('rooms', `Room Directory (${allRooms.length})`, Home)}
+          <div className="card mb-7 p-4 bg-white rounded-2xl shadow-sm border border-zinc-100">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+              <div className="flex gap-1.5 p-1.5 rounded-xl w-full md:w-fit overflow-x-auto" style={{ background: 'rgba(239,246,255,0.70)', border: '1px solid rgba(219,234,254,0.60)' }}>
+                {TAB_BTN('hostels', `Overview (${hostels.length})`, Building2)}
+                {TAB_BTN('rooms', `Room Directory (${allRooms.length})`, Home)}
+              </div>
+              <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                <button onClick={() => setShowAllocateModal(true)} className="btn btn-secondary w-full sm:w-auto"><Users size={15} /> Allocate</button>
+                <button onClick={() => setShowRoomModal(true)} className="btn btn-secondary w-full sm:w-auto"><Plus size={15} /> Add Room</button>
+                <button onClick={() => setShowHostelModal(true)} className="btn btn-primary shrink-0 w-full sm:w-auto"><Building2 size={15} /> Add Hostel</button>
+              </div>
+            </div>
           </div>
 
           {loading ? <Spinner /> : activeTab === 'hostels' ? (

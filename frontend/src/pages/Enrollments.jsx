@@ -72,11 +72,6 @@ const Enrollments = () => {
       <PageHeader
         title={isStudent ? 'My Courses' : 'Enrollment Management'}
         subtitle={isStudent ? 'Your enrolled courses for the current academic session.' : 'Manage student course enrollments and records.'}
-        actions={
-          <button onClick={() => setShowModal(true)} className="btn btn-primary">
-            <Plus size={15} /> {isStudent ? 'Enroll in Course' : 'Enroll Student'}
-          </button>
-        }
       />
 
       {/* Info banner for students */}
@@ -94,7 +89,14 @@ const Enrollments = () => {
       )}
 
       {loading ? <Spinner /> : (
-        <SectionCard title={`${enrollments.length} Enrollment${enrollments.length !== 1 ? 's' : ''}`}>
+        <SectionCard 
+          title={`${enrollments.length} Enrollment${enrollments.length !== 1 ? 's' : ''}`}
+          actions={
+            <button onClick={() => setShowModal(true)} className="btn btn-primary shrink-0">
+              <Plus size={15} /> {isStudent ? 'Enroll in Course' : 'Enroll Student'}
+            </button>
+          }
+        >
           <TableWrapper>
             <thead>
               <tr>

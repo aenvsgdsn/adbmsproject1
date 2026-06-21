@@ -108,11 +108,6 @@ const Attendance = () => {
       <PageHeader
         title="Attendance Records"
         subtitle={isFaculty ? 'Mark and manage student attendance for your sections.' : 'View your attendance history and current standing.'}
-        actions={isFaculty && selectedSection && (
-          <button onClick={handleSaveAttendance} disabled={saving} className="btn btn-primary">
-            {saving ? <><span className="animate-spin">⏳</span> Saving...</> : <><CheckCircle size={15} /> Save Attendance</>}
-          </button>
-        )}
       />
 
       {/* Controls */}
@@ -165,7 +160,14 @@ const Attendance = () => {
       ) : attendanceData.length === 0 && isFaculty ? (
         <EmptyState icon={Users} title="No Students Found" subtitle="Enrolled students will appear here to mark attendance." />
       ) : (
-        <SectionCard title={`Attendance — ${attendanceData.length} Students`}>
+        <SectionCard 
+          title={`Attendance — ${attendanceData.length} Students`}
+          actions={isFaculty && selectedSection && (
+            <button onClick={handleSaveAttendance} disabled={saving} className="btn btn-primary">
+              {saving ? <><span className="animate-spin">⏳</span> Saving...</> : <><CheckCircle size={15} /> Save Attendance</>}
+            </button>
+          )}
+        >
           <TableWrapper>
             <thead>
               <tr>
@@ -192,12 +194,12 @@ const Attendance = () => {
                   <td><span className={`badge ${STATUS_BADGE[r.status] || 'badge-gray'}`}>{r.status}</span></td>
                   {isFaculty && (
                     <td>
-                      <div className="flex gap-1.5 justify-center">
+                      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 w-full max-w-[280px]">
                         {['Present', 'Absent', 'Late', 'Leave'].map(s => (
                           <button
                             key={s}
                             onClick={() => handleMark(r.student_id, s)}
-                            className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all border ${
+                            className={`w-full py-1.5 rounded-lg text-xs font-bold transition-all border text-center ${
                               markMap[r.student_id] === s
                                 ? MARK_COLORS[s].active
                                 : 'bg-white text-slate-500 border-slate-200 hover:border-blue-300 hover:text-blue-600'

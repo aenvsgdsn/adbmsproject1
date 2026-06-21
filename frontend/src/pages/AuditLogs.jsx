@@ -37,11 +37,6 @@ const AuditLogs = () => {
       <PageHeader
         title="System Audit Logs"
         subtitle="Complete unalterable record of all system actions and data changes"
-        actions={
-          <button onClick={load} className="btn btn-secondary">
-            <RefreshCw size={15} className={loading ? 'animate-spin' : ''} /> Refresh
-          </button>
-        }
       />
 
       {/* Filters */}
@@ -65,7 +60,14 @@ const AuditLogs = () => {
       </Card>
 
       {loading ? <Spinner /> : (
-        <SectionCard title={`${logs.length} Log Entries`}>
+        <SectionCard 
+          title={`${logs.length} Log Entries`}
+          actions={
+            <button onClick={load} className="btn btn-secondary shrink-0">
+              <RefreshCw size={15} className={loading ? 'animate-spin' : ''} /> Refresh
+            </button>
+          }
+        >
           <TableWrapper>
             <thead>
               <tr>

@@ -123,13 +123,6 @@ const Faculty = () => {
       <PageHeader
         title="Faculty Members"
         subtitle="Meet our academic team across all departments"
-        actions={
-          user?.role === 'Admin' && (
-            <button onClick={() => setShowModal(true)} className="btn btn-primary">
-              <Plus size={15} /> Add Faculty
-            </button>
-          )
-        }
       />
 
       {/* Stats Row */}
@@ -140,23 +133,32 @@ const Faculty = () => {
         ))}
       </div>
 
-      {/* Search */}
-      <div className="max-w-md mb-7">
-        <SearchBar
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          placeholder="Search by name, designation, or department..."
-        />
-      </div>
-
-      {/* Grid */}
-      {loading ? <Spinner /> : filtered.length === 0 ? (
-        <EmptyState icon={GraduationCap} title="No faculty members found" subtitle="Try adjusting your search or add new faculty." />
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-          {filtered.map(f => <FacultyCard key={f.faculty_id} member={f} />)}
-        </div>
-      )}
+      <SectionCard
+        title="Directory"
+        actions={
+          <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+            <SearchBar
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="Search by name, designation..."
+            />
+            {user?.role === 'Admin' && (
+              <button onClick={() => setShowModal(true)} className="btn btn-primary shrink-0">
+                <Plus size={15} /> Add Faculty
+              </button>
+            )}
+          </div>
+        }
+        className="bg-transparent border-0 shadow-none p-0"
+      >
+        {loading ? <Spinner /> : filtered.length === 0 ? (
+          <EmptyState icon={GraduationCap} title="No faculty members found" subtitle="Try adjusting your search or add new faculty." />
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+            {filtered.map(f => <FacultyCard key={f.faculty_id} member={f} />)}
+          </div>
+        )}
+      </SectionCard>
 
       {/* Modal */}
       {showModal && (
