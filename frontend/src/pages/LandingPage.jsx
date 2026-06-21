@@ -1,4 +1,4 @@
-﻿import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ArrowRight, BookOpen, Users, Calendar, DollarSign, Library, GraduationCap, Shield, Zap, Globe, LayoutDashboard } from 'lucide-react';
 
 const NAV_LINKS = [
@@ -142,11 +142,11 @@ const LandingPage = () => {
       {/* ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
           WHY HISUP SECTION
       ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ */}
-      <section id="about" className="py-32 relative border-t border-white/5 bg-[#020713]">
-        <div className="max-w-7xl mx-auto px-6 relative z-10 flex flex-col lg:flex-row items-center gap-16">
+      <section id="about" className="py-40 relative border-t border-white/5 bg-[#020713]">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10 flex flex-col lg:flex-row items-center gap-24">
           <div className="flex-1">
-            <h2 className="text-4xl md:text-5xl font-black text-white mb-8 tracking-tight">Built for <br/><span className="text-cyan-400">Excellence.</span></h2>
-            <p className="text-slate-400 text-lg leading-relaxed mb-8">
+            <h2 className="text-4xl md:text-5xl font-black text-white mb-10 tracking-tight">Built for <br/><span className="text-cyan-400">Excellence.</span></h2>
+            <p className="text-slate-400 text-lg leading-relaxed mb-12">
               HiSUP replaces fragmented legacy systems with a single, cohesive interface. It is architected for speed, reliability, and security, ensuring that students and faculty can focus on what truly matters: education.
             </p>
             <ul className="flex flex-col gap-8">
@@ -155,13 +155,13 @@ const LandingPage = () => {
                 { icon: Zap, title: 'Lightning Fast', text: 'Optimized performance for thousands of concurrent users.' },
                 { icon: Globe, title: 'Cloud Native', text: 'Accessible from anywhere, on any device, at any time.' }
               ].map((item, i) => (
-                <li key={i} className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-cyan-500/10 flex items-center justify-center shrink-0 border border-cyan-500/20">
-                    <item.icon size={18} className="text-cyan-400" />
+                <li key={i} className="flex items-start gap-5 py-4 border-b border-white/5 last:border-0">
+                  <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 flex items-center justify-center shrink-0 border border-cyan-500/20 mt-0.5">
+                    <item.icon size={20} className="text-cyan-400" />
                   </div>
-                  <div>
-                    <h4 className="text-white font-bold">{item.title}</h4>
-                    <p className="text-slate-400 text-sm">{item.text}</p>
+                  <div className="pt-1">
+                    <h4 className="text-white font-bold text-base mb-1">{item.title}</h4>
+                    <p className="text-slate-400 text-sm leading-relaxed">{item.text}</p>
                   </div>
                 </li>
               ))}
