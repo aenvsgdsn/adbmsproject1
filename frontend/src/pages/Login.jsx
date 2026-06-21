@@ -1,21 +1,21 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Eye, EyeOff, Loader2, GraduationCap, ArrowRight, BookOpen, Users, BarChart2 } from 'lucide-react';
+import { Eye, EyeOff, Loader2, GraduationCap, ArrowRight, BookOpen, Users, BarChart2, CheckCircle2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const DEMO_ACCOUNTS = [
-  { role: 'Admin',   email: 'admin@hisup.edu',   password: 'admin123' },
-  { role: 'Faculty', email: 'faculty@hisup.edu',  password: 'password123' },
-  { role: 'Student', email: 'student@hisup.edu',  password: 'password123' },
-  { role: 'Finance', email: 'finance@hisup.edu',  password: 'password123' },
+  { role: 'Admin',   email: 'admin@hisup.edu',   password: 'admin123',    color: 'bg-rose-500' },
+  { role: 'Faculty', email: 'faculty@hisup.edu',  password: 'password123', color: 'bg-indigo-500' },
+  { role: 'Student', email: 'student@hisup.edu',  password: 'password123', color: 'bg-violet-500' },
+  { role: 'Finance', email: 'finance@hisup.edu',  password: 'password123', color: 'bg-emerald-500' },
 ];
 
-const FEATURES = [
-  { icon: GraduationCap, label: 'Student Portal',  desc: 'Track grades, attendance & fees' },
-  { icon: BookOpen,      label: 'Academic Hub',    desc: 'Courses, sections & schedules' },
-  { icon: Users,         label: 'Faculty Access',  desc: 'Manage classes & mark grades' },
-  { icon: BarChart2,     label: 'Analytics',       desc: 'Real-time institutional data' },
+const PERKS = [
+  { icon: GraduationCap, text: 'Track grades & academic progress' },
+  { icon: BarChart2,     text: 'Real-time analytics & reports' },
+  { icon: BookOpen,      text: 'Library & hostel management' },
+  { icon: Users,         text: 'Multi-role access control' },
 ];
 
 const Login = () => {
@@ -36,8 +36,8 @@ const Login = () => {
       navigate('/dashboard');
     } catch (err) {
       const errorData = err?.response?.data?.error;
-      const errorMessage = typeof errorData === 'string' 
-        ? errorData 
+      const errorMessage = typeof errorData === 'string'
+        ? errorData
         : (errorData?.message || 'Login failed. Check your credentials.');
       toast.error(errorMessage);
     } finally {
@@ -46,100 +46,28 @@ const Login = () => {
   };
 
   return (
-    <div
-      className="min-h-screen flex font-inter animate-fade-in"
-      style={{ background: 'linear-gradient(135deg, #eff6ff 0%, #f8fafc 50%, #eef2ff 100%)' }}
-    >
-      {/* ── Left Branding Panel ────────────────────────── */}
-      <div
-        className="hidden lg:flex w-[44%] flex-col justify-between p-12 relative overflow-hidden"
-        style={{
-          background: 'linear-gradient(160deg, #1e3a8a 0%, #1d4ed8 60%, #2563eb 100%)',
-        }}
-      >
-        {/* Decorative blobs */}
-        <div className="absolute top-0 right-0 w-96 h-96 rounded-full opacity-10 -mr-32 -mt-32"
-          style={{ background: 'radial-gradient(circle, white, transparent)' }} />
-        <div className="absolute bottom-0 left-0 w-72 h-72 rounded-full opacity-10 -ml-20 -mb-20"
-          style={{ background: 'radial-gradient(circle, white, transparent)' }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full opacity-5"
-          style={{ background: 'radial-gradient(circle, white, transparent)' }} />
+    <div className="min-h-screen flex font-inter bg-[#fafafa]">
 
-        {/* Logo */}
-        <div className="relative z-10 flex items-center gap-3">
-          <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30">
-            <GraduationCap className="text-white" size={22} />
-          </div>
-          <div>
-            <span className="text-white font-bold text-xl tracking-tight font-outfit">HiSUP</span>
-            <span className="text-blue-200 text-xs ml-1.5 font-semibold">2.0</span>
-          </div>
-        </div>
-
-        {/* Main Text */}
-        <div className="relative z-10">
-          <h1 className="text-4xl font-extrabold text-white leading-[1.15] mb-5 font-outfit tracking-tight">
-            Next-Generation<br />
-            <span className="text-blue-200">Campus Management</span>
-          </h1>
-          <p className="text-blue-100 text-base leading-relaxed mb-10 max-w-sm">
-            A unified platform to manage your academic journey, student services, and institutional administration.
-          </p>
-
-          {/* Feature Pills */}
-          <div className="grid grid-cols-2 gap-3">
-            {FEATURES.map(({ icon: Icon, label, desc }) => (
-              <div
-                key={label}
-                className="p-4 rounded-xl flex flex-col gap-2 transition-colors"
-                style={{
-                  background: 'rgba(255,255,255,0.10)',
-                  backdropFilter: 'blur(12px)',
-                  border: '1px solid rgba(255,255,255,0.15)',
-                }}
-              >
-                <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
-                  <Icon size={16} className="text-white" />
-                </div>
-                <div>
-                  <p className="text-white font-semibold text-sm">{label}</p>
-                  <p className="text-blue-200 text-xs">{desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <p className="relative z-10 text-blue-300 text-sm">© {new Date().getFullYear()} HiSUP University Systems</p>
-      </div>
-
-      {/* ── Right Login Panel ──────────────────────────── */}
+      {/* ── Left — Form Panel ─────────────────────────────── */}
       <div className="flex-1 flex items-center justify-center p-6 sm:p-12 relative">
-        {/* Mobile Logo */}
+        {/* Top-left logo (mobile visible) */}
         <div className="absolute top-6 left-6 flex items-center gap-2 lg:hidden">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #2563eb, #1d4ed8)' }}>
+          <div className="w-8 h-8 rounded-xl flex items-center justify-center bg-gradient-to-br from-violet-600 to-purple-700 shadow-md shadow-violet-400/25">
             <GraduationCap className="text-white" size={16} />
           </div>
-          <span className="font-bold text-lg text-blue-900 font-outfit">HiSUP</span>
+          <span className="font-extrabold text-lg text-zinc-900">HiSUP <span className="text-violet-600">2.0</span></span>
         </div>
 
         <div className="w-full max-w-md animate-slide-up">
           {/* Header */}
           <div className="mb-8">
-            <h2 className="text-3xl font-extrabold text-slate-900 font-outfit tracking-tight">Welcome back</h2>
-            <p className="text-slate-500 mt-2 text-sm">Enter your credentials to access the portal</p>
+            <p className="text-xs font-bold uppercase tracking-widest text-violet-600 mb-3">Welcome Back</p>
+            <h1 className="text-3xl font-extrabold text-zinc-900 tracking-tight mb-2">Sign in to your account</h1>
+            <p className="text-zinc-500 text-sm">Enter your credentials to access the portal</p>
           </div>
 
-          {/* Form Card */}
-          <div
-            className="p-7 rounded-2xl mb-5"
-            style={{
-              background: 'rgba(255,255,255,0.92)',
-              backdropFilter: 'blur(20px)',
-              border: '1px solid rgba(219,234,254,0.70)',
-              boxShadow: '0 8px 32px rgba(37,99,235,0.08)',
-            }}
-          >
+          {/* Form */}
+          <div className="bg-white rounded-2xl border border-zinc-200 shadow-sm p-7 mb-5">
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="form-group">
                 <label htmlFor="login-email" className="form-label">Email Address</label>
@@ -159,7 +87,7 @@ const Login = () => {
               <div className="form-group">
                 <div className="flex justify-between items-center mb-1.5">
                   <label htmlFor="login-password" className="form-label mb-0">Password</label>
-                  <a href="#" className="text-xs font-semibold text-blue-600 hover:text-blue-800 transition-colors">
+                  <a href="#" className="text-xs font-semibold text-violet-600 hover:text-violet-800 transition-colors">
                     Forgot password?
                   </a>
                 </div>
@@ -177,7 +105,7 @@ const Login = () => {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 transition-colors"
                   >
                     {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
                   </button>
@@ -188,7 +116,7 @@ const Login = () => {
                 id="login-submit-btn"
                 type="submit"
                 disabled={loading}
-                className="btn btn-primary btn-lg w-full mt-2 group"
+                className="w-full flex items-center justify-center gap-2 bg-gradient-to-br from-violet-600 to-purple-700 text-white font-bold py-3.5 px-6 rounded-xl shadow-lg shadow-violet-500/25 hover:shadow-violet-500/45 hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none mt-1 text-sm"
               >
                 {loading ? (
                   <><Loader2 size={17} className="animate-spin" /> Signing in...</>
@@ -200,48 +128,102 @@ const Login = () => {
           </div>
 
           {/* Demo Credentials */}
-          <div
-            className="p-5 rounded-2xl"
-            style={{
-              background: 'rgba(255,255,255,0.80)',
-              backdropFilter: 'blur(16px)',
-              border: '1px solid rgba(219,234,254,0.60)',
-            }}
-          >
-            <p className="text-[10px] font-bold text-blue-800 uppercase tracking-widest mb-3 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+          <div className="bg-white rounded-2xl border border-zinc-200 shadow-sm p-5 mb-5">
+            <p className="text-[10px] font-bold text-violet-700 uppercase tracking-widest mb-3 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-violet-500 animate-pulse" />
               Demo Credentials — Click to Fill
             </p>
             <div className="grid grid-cols-2 gap-2">
-              {DEMO_ACCOUNTS.map(({ role, email, password }) => (
+              {DEMO_ACCOUNTS.map(({ role, email, password, color }) => (
                 <button
                   key={role}
                   type="button"
                   onClick={() => setForm({ email, password })}
-                  className="text-left p-3 rounded-xl transition-all duration-200"
-                  style={{ background: 'rgba(239,246,255,0.70)', border: '1px solid rgba(219,234,254,0.60)' }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.background = 'rgba(219,234,254,0.70)';
-                    e.currentTarget.style.borderColor = 'rgba(147,197,253,0.60)';
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.background = 'rgba(239,246,255,0.70)';
-                    e.currentTarget.style.borderColor = 'rgba(219,234,254,0.60)';
-                  }}
+                  className="text-left p-3 rounded-xl border border-zinc-100 hover:border-violet-200 hover:bg-violet-50 transition-all duration-200 group"
                 >
-                  <p className="font-bold text-slate-800 text-sm">{role}</p>
-                  <p className="text-slate-400 text-[11px] mt-0.5">{email}</p>
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <span className={`w-2 h-2 rounded-full ${color}`} />
+                    <p className="font-bold text-zinc-800 text-sm">{role}</p>
+                  </div>
+                  <p className="text-zinc-400 text-[11px] truncate">{email}</p>
                 </button>
               ))}
             </div>
           </div>
 
-          <p className="text-center text-sm text-slate-500 mt-5">
+          <p className="text-center text-sm text-zinc-500">
             Don't have an account?{' '}
-            <Link to="/register" className="text-blue-600 font-semibold hover:text-blue-800 transition-colors">
+            <Link to="/register" className="text-violet-600 font-bold hover:text-violet-800 transition-colors">
               Register here
             </Link>
           </p>
+        </div>
+      </div>
+
+      {/* ── Right — Branding Panel ─────────────────────────── */}
+      <div className="hidden lg:flex w-[46%] flex-col justify-between p-12 relative overflow-hidden"
+        style={{ background: 'linear-gradient(160deg, #5b21b6 0%, #7c3aed 40%, #6d28d9 70%, #4f46e5 100%)' }}
+      >
+        {/* Decorative circles */}
+        <div className="absolute -top-24 -right-24 w-80 h-80 rounded-full opacity-20 pointer-events-none"
+          style={{ background: 'radial-gradient(circle, white, transparent)' }} />
+        <div className="absolute bottom-0 -left-20 w-64 h-64 rounded-full opacity-15 pointer-events-none"
+          style={{ background: 'radial-gradient(circle, white, transparent)' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-[0.06] pointer-events-none"
+          style={{ background: 'radial-gradient(circle, white, transparent)' }} />
+        {/* Spinning ring decoration */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[420px] h-[420px] rounded-full border border-white/10 animate-spin-slow pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] rounded-full border border-white/10 animate-spin-slow pointer-events-none" style={{ animationDirection: 'reverse', animationDuration: '20s' }} />
+
+        {/* Logo */}
+        <div className="relative z-10 flex items-center gap-3">
+          <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30">
+            <GraduationCap className="text-white" size={22} />
+          </div>
+          <div>
+            <span className="text-white font-extrabold text-xl tracking-tight">HiSUP</span>
+            <span className="text-violet-200 text-xs ml-1.5 font-bold">2.0</span>
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="relative z-10">
+          <h2 className="text-4xl font-extrabold text-white leading-[1.15] mb-5 tracking-tight">
+            Next-Generation<br />
+            <span className="text-violet-200">Campus Management</span>
+          </h2>
+          <p className="text-white/70 text-base leading-relaxed mb-10 max-w-sm">
+            A unified platform to manage your academic journey, student services, and institutional administration — all in one place.
+          </p>
+
+          {/* Feature Perks List */}
+          <div className="flex flex-col gap-3.5">
+            {PERKS.map(({ icon: Icon, text }) => (
+              <div key={text} className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-white/15 border border-white/20 flex items-center justify-center shrink-0">
+                  <Icon size={15} className="text-white" />
+                </div>
+                <span className="text-white/85 text-sm font-medium">{text}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Stats row */}
+        <div className="relative z-10">
+          <div className="grid grid-cols-3 gap-4 mb-6">
+            {[
+              { val: '10K+', label: 'Students' },
+              { val: '500+', label: 'Faculty' },
+              { val: '99.9%', label: 'Uptime' },
+            ].map(({ val, label }) => (
+              <div key={label} className="bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl p-3.5 text-center">
+                <p className="text-white font-extrabold text-lg leading-tight">{val}</p>
+                <p className="text-white/60 text-xs font-semibold mt-0.5">{label}</p>
+              </div>
+            ))}
+          </div>
+          <p className="text-white/40 text-xs font-semibold">© {new Date().getFullYear()} HiSUP University Systems</p>
         </div>
       </div>
     </div>
