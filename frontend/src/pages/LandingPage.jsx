@@ -149,7 +149,7 @@ const LandingPage = () => {
             <p className="text-slate-400 text-lg leading-relaxed mb-8">
               HiSUP replaces fragmented legacy systems with a single, cohesive interface. It is architected for speed, reliability, and security, ensuring that students and faculty can focus on what truly matters: education.
             </p>
-            <ul className="space-y-4">
+            <ul className="flex flex-col gap-8">
               {[
                 { icon: Shield, title: 'Enterprise-Grade Security', text: 'Role-based access control and encrypted data storage.' },
                 { icon: Zap, title: 'Lightning Fast', text: 'Optimized performance for thousands of concurrent users.' },
@@ -167,9 +167,9 @@ const LandingPage = () => {
               ))}
             </ul>
           </div>
-          <div className="flex-1 relative w-full aspect-square max-w-lg mx-auto">
+          <div className="flex-1 relative w-full max-w-lg mx-auto mt-12 lg:mt-0">
             <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/20 to-blue-600/20 rounded-full blur-[100px] animate-pulse" />
-            <div className="relative h-full w-full bg-white/5 border border-white/10 rounded-[2.5rem] backdrop-blur-sm p-8 shadow-2xl flex flex-col overflow-hidden">
+            <div className="relative w-full min-h-[450px] bg-white/5 border border-white/10 rounded-[2.5rem] backdrop-blur-sm p-10 shadow-2xl flex flex-col overflow-hidden">
                {/* Mockup UI Window */}
                <div className="flex gap-2 mb-8">
                  <div className="w-3 h-3 rounded-full bg-rose-500" />
