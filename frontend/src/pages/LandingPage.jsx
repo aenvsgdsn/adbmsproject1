@@ -1,209 +1,305 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, BookOpen, Users, Calendar, DollarSign, Library, GraduationCap, Shield, Zap, Globe, LayoutDashboard } from 'lucide-react';
+import { ArrowRight, BookOpen, Users, Calendar, DollarSign, Library, GraduationCap, Shield, Zap, Globe, Star, ChevronRight } from 'lucide-react';
 
 const NAV_LINKS = [
-  { label: 'Overview', href: '#home' },
+  { label: 'Home', href: '#home' },
   { label: 'Modules', href: '#modules' },
-  { label: 'Why HiSUP', href: '#about' },
+  { label: 'About', href: '#about' },
+];
+
+const STATS = [
+  { value: '6+',    label: 'Core Modules' },
+  { value: '500+',  label: 'Active Students' },
+  { value: '50+',   label: 'Courses' },
+  { value: '99%',   label: 'Uptime' },
+];
+
+const MODULES = [
+  { icon: Users,         title: 'Student Management',  color: 'bg-gradient-to-br from-blue-500 to-blue-700',     light: 'bg-blue-50',   accent: 'text-blue-600', desc: 'Profiles, enrollment, and academic history.' },
+  { icon: BookOpen,      title: 'Course Registration',  color: 'bg-gradient-to-br from-violet-500 to-purple-700', light: 'bg-purple-50', accent: 'text-purple-600', desc: 'Online registration and capacity monitoring.' },
+  { icon: GraduationCap, title: 'Faculty Portal',       color: 'bg-gradient-to-br from-cyan-500 to-teal-600',    light: 'bg-cyan-50',   accent: 'text-cyan-600', desc: 'Teaching roles, schedules, and departments.' },
+  { icon: DollarSign,    title: 'Fee Management',       color: 'bg-gradient-to-br from-emerald-500 to-green-700',light: 'bg-emerald-50',accent: 'text-emerald-600', desc: 'Fee tracking, payments, and finance reports.' },
+  { icon: Library,       title: 'Smart Library',        color: 'bg-gradient-to-br from-amber-500 to-orange-600', light: 'bg-amber-50',  accent: 'text-amber-600', desc: 'Book catalog, issue tracking, and due dates.' },
+  { icon: Calendar,      title: 'Results & Grading',    color: 'bg-gradient-to-br from-rose-500 to-pink-700',    light: 'bg-rose-50',   accent: 'text-rose-600', desc: 'Grade uploads, GPA calculations, transcripts.' },
 ];
 
 const LandingPage = () => {
   return (
-    <div className="min-h-screen bg-[#030b1c] text-slate-200 selection:bg-cyan-500/30 font-inter">
-      
-      {/* ────────────────────────────────────────────────────────
+    <div className="min-h-screen bg-white text-slate-800 font-inter overflow-x-hidden">
+
+      {/* ──────────────────────────────────────────────────────────
           NAVBAR
-      ──────────────────────────────────────────────────────── */}
-      <nav className="fixed top-0 inset-x-0 z-50 transition-all duration-300 bg-[#030b1c]/70 backdrop-blur-md border-b border-white/5">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-3 group cursor-pointer">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center shadow-[0_0_20px_rgba(34,211,238,0.4)] group-hover:shadow-[0_0_30px_rgba(34,211,238,0.6)] transition-all duration-300">
+      ────────────────────────────────────────────────────────── */}
+      <nav className="fixed top-0 inset-x-0 z-50 bg-white/80 backdrop-blur-xl border-b border-blue-100/60">
+        <div className="max-w-7xl mx-auto px-6 md:px-10 h-20 flex items-center justify-between">
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-3 group">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center shadow-lg shadow-blue-200 group-hover:shadow-blue-300 transition-all duration-300">
               <span className="text-white font-black text-xl">H</span>
             </div>
             <div>
-              <h1 className="font-bold text-xl text-white tracking-tight leading-none">HiSUP</h1>
-              <p className="text-[10px] text-cyan-400 font-semibold tracking-widest uppercase mt-0.5">Smart Portal</p>
+              <p className="font-black text-xl text-slate-900 leading-none tracking-tight">HiSUP</p>
+              <p className="text-[10px] font-bold text-blue-500 tracking-widest uppercase mt-0.5">HITEC University</p>
             </div>
-          </div>
+          </Link>
 
+          {/* Center links */}
           <div className="hidden md:flex items-center gap-8">
             {NAV_LINKS.map(link => (
-              <a key={link.label} href={link.href} className="text-sm font-medium text-slate-400 hover:text-cyan-400 transition-colors">
+              <a key={link.label} href={link.href} className="text-sm font-semibold text-slate-500 hover:text-blue-600 transition-colors">
                 {link.label}
               </a>
             ))}
           </div>
 
+          {/* CTA */}
           <Link
             to="/login"
-            className="group relative inline-flex items-center justify-center gap-2 px-6 py-2.5 text-sm font-bold text-white bg-white/5 border border-white/10 rounded-full hover:bg-white/10 hover:border-cyan-400/50 transition-all duration-300 overflow-hidden"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white text-sm font-bold rounded-full shadow-lg shadow-blue-200 hover:shadow-blue-300 hover:-translate-y-0.5 transition-all duration-300"
           >
-            <span className="relative z-10">Access Portal</span>
-            <ArrowRight size={16} className="relative z-10 group-hover:translate-x-1 transition-transform" />
-            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/0 via-cyan-500/10 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-x-[-100%] group-hover:translate-x-[100%]" />
+            Sign In <ArrowRight size={15} />
           </Link>
         </div>
       </nav>
 
-      {/* ────────────────────────────────────────────────────────
+      {/* ──────────────────────────────────────────────────────────
           HERO SECTION
-      ──────────────────────────────────────────────────────── */}
-      <section id="home" className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
-        {/* Background Image */}
-        <div
-          className="absolute inset-0 z-0"
-          style={{
-            backgroundImage: "url('/mtech-bg.png')",
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundAttachment: 'fixed'
-          }}
-        />
-        
-        {/* Overlay Gradients */}
-        <div className="absolute inset-0 z-0 bg-[#030b1c]/80 backdrop-blur-[2px]" />
-        <div className="absolute inset-0 z-0 bg-gradient-to-t from-[#030b1c] via-transparent to-[#030b1c]/50" />
-        <div className="absolute inset-0 z-0 bg-gradient-to-r from-[#030b1c] via-transparent to-[#030b1c]" />
+      ────────────────────────────────────────────────────────── */}
+      <section id="home" className="pt-32 pb-24 relative overflow-hidden">
+        {/* Background blobs */}
+        <div className="absolute -top-40 -right-40 w-[700px] h-[700px] bg-gradient-to-br from-blue-100 to-indigo-200 rounded-full opacity-50 blur-[80px] pointer-events-none" />
+        <div className="absolute -bottom-32 -left-32 w-[500px] h-[500px] bg-gradient-to-tr from-cyan-100 to-blue-200 rounded-full opacity-40 blur-[80px] pointer-events-none" />
 
-        <div className="relative z-10 max-w-5xl mx-auto px-6 text-center flex flex-col items-center mt-10">
+        <div className="max-w-7xl mx-auto px-6 md:px-10 flex flex-col lg:flex-row items-center gap-16 relative z-10">
           
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/20 backdrop-blur-md mb-8 animate-fade-in-up">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
-            </span>
-            <span className="text-xs font-bold uppercase tracking-wider text-cyan-400">Welcome to the Future of Education</span>
+          {/* ── Left: Text Content ── */}
+          <div className="flex-1 max-w-xl">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-100 rounded-full mb-8">
+              <Star size={13} className="text-blue-500 fill-blue-500" />
+              <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">HITEC Smart University Portal</span>
+            </div>
+
+            <h1 className="text-5xl md:text-6xl font-black text-slate-900 leading-[1.08] tracking-tight mb-6">
+              Invest in{' '}
+              <span className="relative">
+                Knowledge
+                <span className="absolute -bottom-1 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full" />
+              </span>{' '}
+              and<br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-500">
+                Your Future
+              </span>
+            </h1>
+
+            <p className="text-lg text-slate-500 leading-relaxed mb-10 max-w-md">
+              A centralized digital platform streamlining academic, administrative, and student services at HITEC University. Secure, modern, and intelligent.
+            </p>
+
+            <div className="flex flex-wrap items-center gap-4 mb-14">
+              <Link
+                to="/login"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-bold rounded-2xl text-base shadow-xl shadow-blue-200 hover:shadow-blue-300 hover:-translate-y-1 transition-all duration-300"
+              >
+                Access Portal <ArrowRight size={18} />
+              </Link>
+              <a
+                href="#modules"
+                className="inline-flex items-center gap-2 px-8 py-4 border-2 border-slate-200 text-slate-700 font-bold rounded-2xl text-base hover:border-blue-300 hover:text-blue-600 transition-all duration-300"
+              >
+                Explore Modules
+              </a>
+            </div>
+
+            {/* ── Stats Row ── */}
+            <div className="flex flex-wrap items-center gap-10 pt-6 border-t border-slate-100">
+              {STATS.map((s, i) => (
+                <div key={i} className="text-left">
+                  <p className="text-2xl font-black text-slate-900">{s.value}</p>
+                  <p className="text-xs font-semibold text-slate-400 mt-0.5">{s.label}</p>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-[1.05] mb-8 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-            HITEC Smart <br/>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500">
-              University Portal
-            </span>
-          </h1>
+          {/* ── Right: Visual Card ── */}
+          <div className="flex-1 flex items-center justify-center w-full max-w-lg lg:max-w-none relative">
+            {/* Decorative circle behind */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-[420px] h-[420px] rounded-full bg-gradient-to-br from-blue-100/80 to-indigo-200/60 border-4 border-blue-100" />
+            </div>
 
-          <p className="text-lg md:text-xl text-slate-400 max-w-2xl mb-12 leading-relaxed animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-            A unified digital ecosystem seamlessly connecting students, faculty, and administration through a modern, intelligent web platform.
-          </p>
+            {/* Main card */}
+            <div className="relative z-10 w-full max-w-md mx-auto">
+              <div className="bg-white rounded-[2rem] shadow-2xl shadow-blue-100/60 p-8 border border-blue-50">
+                {/* Window dots */}
+                <div className="flex gap-2 mb-6">
+                  <div className="w-3 h-3 rounded-full bg-rose-400" />
+                  <div className="w-3 h-3 rounded-full bg-amber-400" />
+                  <div className="w-3 h-3 rounded-full bg-emerald-400" />
+                </div>
 
-          <div className="flex flex-col sm:flex-row items-center gap-5 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-            <Link
-              to="/login"
-              className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold rounded-2xl shadow-[0_0_30px_rgba(6,182,212,0.3)] hover:shadow-[0_0_40px_rgba(6,182,212,0.5)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3"
-            >
-              <LayoutDashboard size={20} />
-              Login to Dashboard
-            </Link>
-            <a
-              href="#modules"
-              className="w-full sm:w-auto px-8 py-4 bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold rounded-2xl backdrop-blur-md transition-all duration-300 flex items-center justify-center gap-3"
-            >
-              Explore Modules
-            </a>
+                {/* Fake header */}
+                <div className="flex items-center justify-between mb-6">
+                  <div className="h-6 w-32 bg-slate-100 rounded-lg" />
+                  <div className="h-8 w-24 bg-blue-500 rounded-lg" />
+                </div>
+
+                {/* Fake stat cards */}
+                <div className="grid grid-cols-2 gap-4 mb-6">
+                  <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 text-white">
+                    <p className="text-2xl font-black">500+</p>
+                    <p className="text-xs font-semibold text-blue-200 mt-1">Active Students</p>
+                    <div className="mt-3 h-1.5 bg-blue-400/40 rounded-full">
+                      <div className="h-1.5 bg-white/70 rounded-full w-3/4" />
+                    </div>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-700 text-white">
+                    <p className="text-2xl font-black">50+</p>
+                    <p className="text-xs font-semibold text-purple-200 mt-1">Courses Offered</p>
+                    <div className="mt-3 h-1.5 bg-purple-400/40 rounded-full">
+                      <div className="h-1.5 bg-white/70 rounded-full w-2/3" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Fake bar chart */}
+                <div className="bg-slate-50 rounded-2xl p-4">
+                  <p className="text-xs font-bold text-slate-400 mb-4 uppercase tracking-wider">Enrollment Overview</p>
+                  <div className="flex items-end gap-3 h-20">
+                    {[55, 80, 60, 90, 70, 95, 75].map((h, i) => (
+                      <div
+                        key={i}
+                        className="flex-1 rounded-t-lg"
+                        style={{
+                          height: `${h}%`,
+                          background: i % 2 === 0
+                            ? 'linear-gradient(to top, #3b82f6, #6366f1)'
+                            : 'linear-gradient(to top, #93c5fd, #c4b5fd)',
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Floating badge */}
+              <div className="absolute -top-4 -right-4 bg-white rounded-2xl shadow-xl shadow-blue-100 px-5 py-3 flex items-center gap-2 border border-blue-50">
+                <div className="w-8 h-8 rounded-xl bg-emerald-100 flex items-center justify-center">
+                  <Shield size={16} className="text-emerald-600" />
+                </div>
+                <div>
+                  <p className="text-xs font-black text-slate-900">100% Secure</p>
+                  <p className="text-[10px] text-slate-400">All data encrypted</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-
-        {/* Decorative Grid Lines */}
-        <div className="absolute inset-0 z-0 pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)', backgroundSize: '4rem 4rem' }} />
       </section>
 
-      {/* ────────────────────────────────────────────────────────
+      {/* ──────────────────────────────────────────────────────────
           MODULES SECTION
-      ──────────────────────────────────────────────────────── */}
-      <section id="modules" className="py-32 relative">
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="text-center max-w-3xl mx-auto mb-20">
-            <h2 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight">Ecosystem Modules</h2>
-            <p className="text-slate-400 text-lg">Comprehensive tools designed to transform and streamline every aspect of university operations.</p>
+      ────────────────────────────────────────────────────────── */}
+      <section id="modules" className="py-28 bg-slate-50 relative">
+        <div className="max-w-7xl mx-auto px-6 md:px-10">
+          <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-4 mb-16">
+            <div>
+              <h2 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">Browse Core<br/>System Modules</h2>
+            </div>
+            <Link to="/login" className="inline-flex items-center gap-2 text-sm font-bold text-blue-600 hover:text-blue-700 group shrink-0">
+              Access All Modules
+              <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                <ChevronRight size={16} />
+              </div>
+            </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              { icon: Users, title: 'Student Management', color: 'from-blue-500 to-blue-600', desc: 'Centralized profiles, enrollment history, and academic tracking.' },
-              { icon: BookOpen, title: 'Course Registration', color: 'from-indigo-500 to-indigo-600', desc: 'Seamless online registration, capacity monitoring, and prerequisites.' },
-              { icon: GraduationCap, title: 'Faculty & Departments', color: 'from-purple-500 to-purple-600', desc: 'Manage teaching assignments, departmental structures, and faculty roles.' },
-              { icon: DollarSign, title: 'Financial Center', color: 'from-emerald-500 to-emerald-600', desc: 'Fee structures, payment verification, and revenue analytics.' },
-              { icon: Library, title: 'Smart Library', color: 'from-amber-500 to-amber-600', desc: 'Digital catalog, issue tracking, and automated due date monitoring.' },
-              { icon: Calendar, title: 'Results & Grading', color: 'from-rose-500 to-rose-600', desc: 'Faculty grade uploads, GPA calculations, and student transcripts.' },
-            ].map((mod, i) => (
-              <div key={i} className="group relative p-8 rounded-3xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.04] hover:border-white/10 transition-all duration-500 overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br opacity-20 blur-[50px] group-hover:opacity-40 transition-opacity duration-500 rounded-full translate-x-1/2 -translate-y-1/2" />
-                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${mod.color} flex items-center justify-center shadow-lg mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500`}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {MODULES.map((mod, i) => (
+              <div
+                key={i}
+                className="group bg-white rounded-3xl p-8 border border-slate-100 hover:border-blue-100 hover:shadow-xl hover:shadow-blue-50 hover:-translate-y-2 transition-all duration-400 cursor-pointer"
+              >
+                <div className={`w-14 h-14 rounded-2xl ${mod.color} flex items-center justify-center shadow-lg mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300`}>
                   <mod.icon size={26} className="text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3">{mod.title}</h3>
-                <p className="text-slate-400 leading-relaxed text-sm">{mod.desc}</p>
+                <h3 className="text-lg font-bold text-slate-900 mb-2">{mod.title}</h3>
+                <p className="text-slate-400 text-sm leading-relaxed">{mod.desc}</p>
+                <div className={`mt-6 inline-flex items-center gap-1 text-sm font-bold ${mod.accent} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}>
+                  Open Module <ArrowRight size={14} />
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ────────────────────────────────────────────────────────
+      {/* ──────────────────────────────────────────────────────────
           WHY HISUP SECTION
-      ──────────────────────────────────────────────────────── */}
-      <section id="about" className="py-32 relative border-t border-white/5 bg-[#020713]">
-        <div className="max-w-7xl mx-auto px-6 relative z-10 flex flex-col lg:flex-row items-center gap-16">
-          <div className="flex-1">
-            <h2 className="text-4xl md:text-5xl font-black text-white mb-8 tracking-tight">Built for <br/><span className="text-cyan-400">Excellence.</span></h2>
-            <p className="text-slate-400 text-lg leading-relaxed mb-8">
-              HiSUP replaces fragmented legacy systems with a single, cohesive interface. It is architected for speed, reliability, and security, ensuring that students and faculty can focus on what truly matters: education.
-            </p>
-            <ul className="flex flex-col gap-8">
+      ────────────────────────────────────────────────────────── */}
+      <section id="about" className="py-28 bg-white relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-bl from-blue-50 to-transparent rounded-full pointer-events-none" />
+        <div className="max-w-7xl mx-auto px-6 md:px-10 relative z-10">
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+            {/* Left: Stats grid */}
+            <div className="grid grid-cols-2 gap-5">
               {[
-                { icon: Shield, title: 'Enterprise-Grade Security', text: 'Role-based access control and encrypted data storage.' },
-                { icon: Zap, title: 'Lightning Fast', text: 'Optimized performance for thousands of concurrent users.' },
-                { icon: Globe, title: 'Cloud Native', text: 'Accessible from anywhere, on any device, at any time.' }
+                { label: 'Secure Access',    desc: 'Role-based login & protected data',    icon: Shield,  color: 'from-blue-500 to-blue-700'    },
+                { label: 'Always Fast',      desc: 'Optimized for thousands of users',     icon: Zap,     color: 'from-amber-500 to-orange-600'  },
+                { label: 'Cloud Native',     desc: 'Access from any device, anywhere',     icon: Globe,   color: 'from-emerald-500 to-teal-600'  },
+                { label: 'Fully Integrated', desc: 'All modules in one platform',          icon: Star,    color: 'from-violet-500 to-purple-700' },
               ].map((item, i) => (
-                <li key={i} className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-cyan-500/10 flex items-center justify-center shrink-0 border border-cyan-500/20">
-                    <item.icon size={18} className="text-cyan-400" />
+                <div key={i} className="p-6 rounded-3xl border border-slate-100 bg-slate-50 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
+                  <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center shadow-md mb-5 group-hover:scale-110 transition-transform`}>
+                    <item.icon size={22} className="text-white" />
                   </div>
-                  <div>
-                    <h4 className="text-white font-bold">{item.title}</h4>
-                    <p className="text-slate-400 text-sm">{item.text}</p>
-                  </div>
-                </li>
+                  <h4 className="font-bold text-slate-900 mb-1">{item.label}</h4>
+                  <p className="text-xs text-slate-400 leading-relaxed">{item.desc}</p>
+                </div>
               ))}
-            </ul>
-          </div>
-          <div className="flex-1 relative w-full max-w-lg mx-auto mt-12 lg:mt-0">
-            <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/20 to-blue-600/20 rounded-full blur-[100px] animate-pulse" />
-            <div className="relative w-full min-h-[450px] bg-white/5 border border-white/10 rounded-[2.5rem] backdrop-blur-sm p-10 shadow-2xl flex flex-col overflow-hidden">
-               {/* Mockup UI Window */}
-               <div className="flex gap-2 mb-8">
-                 <div className="w-3 h-3 rounded-full bg-rose-500" />
-                 <div className="w-3 h-3 rounded-full bg-amber-500" />
-                 <div className="w-3 h-3 rounded-full bg-emerald-500" />
-               </div>
-               <div className="space-y-4 flex-1">
-                 <div className="h-8 w-1/3 bg-white/10 rounded-lg animate-pulse" />
-                 <div className="h-4 w-full bg-white/5 rounded-full" />
-                 <div className="h-4 w-5/6 bg-white/5 rounded-full" />
-                 <div className="h-4 w-4/6 bg-white/5 rounded-full mb-8" />
-                 
-                 <div className="grid grid-cols-2 gap-4">
-                   <div className="h-24 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-2xl border border-white/5" />
-                   <div className="h-24 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-2xl border border-white/5" />
-                 </div>
-               </div>
+            </div>
+
+            {/* Right: Text */}
+            <div>
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-100 rounded-full mb-6">
+                <Star size={13} className="text-blue-500 fill-blue-500" />
+                <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">Why Choose HiSUP</span>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight mb-6 leading-tight">
+                Built for<br/>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Excellence.</span>
+              </h2>
+              <p className="text-slate-500 text-lg leading-relaxed mb-6">
+                HiSUP replaces fragmented legacy systems with a single, cohesive interface. Architected for speed, reliability, and security, ensuring students and faculty focus on what truly matters — education.
+              </p>
+              <p className="text-slate-500 leading-relaxed mb-10">
+                Whether you are a student registering for courses, a faculty member managing grades, or an administrator overseeing operations, HiSUP provides an intuitive and seamless experience for all.
+              </p>
+              <Link
+                to="/login"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-bold rounded-2xl shadow-xl shadow-blue-200 hover:shadow-blue-300 hover:-translate-y-1 transition-all duration-300"
+              >
+                Get Started Today <ArrowRight size={18} />
+              </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ────────────────────────────────────────────────────────
+      {/* ──────────────────────────────────────────────────────────
           FOOTER
-      ──────────────────────────────────────────────────────── */}
-      <footer className="border-t border-white/5 bg-[#030b1c] py-12">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-2 opacity-50">
-            <div className="w-6 h-6 rounded bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center">
-              <span className="text-white font-black text-xs">H</span>
+      ────────────────────────────────────────────────────────── */}
+      <footer className="bg-slate-900 text-white py-12">
+        <div className="max-w-7xl mx-auto px-6 md:px-10 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
+              <span className="text-white font-black text-sm">H</span>
             </div>
-            <span className="font-bold text-sm text-white tracking-tight">HiSUP</span>
+            <span className="font-bold text-white tracking-tight">HiSUP</span>
+            <span className="text-slate-500 text-sm">— HITEC Smart University Portal</span>
           </div>
-          <p className="text-slate-500 text-sm font-medium">
+          <p className="text-slate-500 text-sm">
             © {new Date().getFullYear()} HITEC University. All rights reserved.
           </p>
         </div>
