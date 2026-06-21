@@ -35,7 +35,11 @@ const Login = () => {
       toast.success(`Welcome back, ${user.username}!`);
       navigate('/dashboard');
     } catch (err) {
-      toast.error(err?.response?.data?.error || 'Login failed. Check your credentials.');
+      const errorData = err?.response?.data?.error;
+      const errorMessage = typeof errorData === 'string' 
+        ? errorData 
+        : (errorData?.message || 'Login failed. Check your credentials.');
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
