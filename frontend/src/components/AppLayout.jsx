@@ -144,7 +144,7 @@ const AppLayout = () => {
 
       {/* ── Mobile Glass Bottom Nav (iPhone-style) ──────── */}
       <nav
-        className="mobile-bottom-nav justify-around px-2"
+        className="md:hidden fixed bottom-0 inset-x-0 bg-white/90 backdrop-blur-xl border-t border-zinc-200 flex justify-around px-2 pb-6 pt-2 z-50 shadow-[0_-8px_30px_rgba(0,0,0,0.06)]"
       >
         {bottomItems.map(({ to, icon: Icon, label }) => (
           <NavLink
