@@ -1,47 +1,18 @@
 import { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import Sidebar from '../components/Sidebar';
+import Sidebar, { navItems } from '../components/Sidebar';
 import Topbar from '../components/Topbar';
-import {
-  LayoutDashboard, GraduationCap, Users, BookOpen, CalendarCheck,
-  BarChart2, DollarSign, Library, Home, ClipboardList, X, LogOut
-} from 'lucide-react';
-
-/* Bottom nav items per role (show max 5 for mobile) */
-const mobileNavItems = {
-  Admin: [
-    { to: '/dashboard',  icon: LayoutDashboard, label: 'Home' },
-    { to: '/students',   icon: GraduationCap,   label: 'Students' },
-    { to: '/courses',    icon: BookOpen,         label: 'Courses' },
-    { to: '/finance',    icon: DollarSign,       label: 'Finance' },
-    { to: '/audit-logs', icon: ClipboardList,    label: 'Audit' },
-  ],
-  Student: [
-    { to: '/dashboard',  icon: LayoutDashboard, label: 'Home' },
-    { to: '/enrollments',icon: ClipboardList,   label: 'Courses' },
-    { to: '/attendance', icon: CalendarCheck,   label: 'Attend.' },
-    { to: '/results',    icon: BarChart2,       label: 'Results' },
-    { to: '/finance',    icon: DollarSign,      label: 'Fees' },
-  ],
-  Faculty: [
-    { to: '/dashboard',  icon: LayoutDashboard, label: 'Home' },
-    { to: '/courses',    icon: BookOpen,         label: 'Courses' },
-    { to: '/attendance', icon: CalendarCheck,    label: 'Attend.' },
-    { to: '/results',    icon: BarChart2,        label: 'Grades' },
-  ],
-  Finance: [
-    { to: '/dashboard',  icon: LayoutDashboard, label: 'Home' },
-    { to: '/finance',    icon: DollarSign,      label: 'Payments' },
-    { to: '/students',   icon: GraduationCap,   label: 'Students' },
-  ],
-};
+import { GraduationCap, LogOut, X } from 'lucide-react';
 
 const AppLayout = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const bottomItems = mobileNavItems[user?.role] || [];
+  const items = navItems[user?.role] || [];
+  
+  // Only show the first 5 items on the bottom nav to prevent crowding
+  const bottomItems = items.slice(0, 5);
 
   const handleLogout = () => {
     logout();
@@ -50,7 +21,7 @@ const AppLayout = () => {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden font-inter" style={{ background: 'linear-gradient(135deg, #eff6ff 0%, #f8fafc 45%, #eef2ff 100%)' }}>
+    <div className="flex h-screen overflow-hidden font-inter">
 
       {/* ── Desktop Sidebar ─────────────────────────────── */}
       <Sidebar />
@@ -61,71 +32,66 @@ const AppLayout = () => {
           {/* Backdrop */}
           <div
             className="fixed inset-0 z-50 md:hidden animate-fade-in"
-            style={{ background: 'rgba(15,23,42,0.40)', backdropFilter: 'blur(6px)' }}
+            style={{ background: 'rgba(15,23,42,0.50)', backdropFilter: 'blur(8px)' }}
             onClick={() => setMobileMenuOpen(false)}
           />
 
           {/* Slide-in Menu Panel */}
           <div
-            className="fixed inset-y-0 left-0 z-50 w-72 flex flex-col md:hidden animate-slide-in-left"
+            className="fixed inset-y-0 left-0 z-50 w-80 flex flex-col md:hidden animate-slide-in-left glass"
             style={{
-              background: 'linear-gradient(180deg, #0f172a 0%, #1a2e6b 50%, #1e3a8a 100%)',
-              borderRight: '1px solid rgba(255,255,255,0.08)',
-              boxShadow: '8px 0 40px rgba(0,0,0,0.30)',
+              background: 'rgba(255,255,255,0.85)',
+              borderRight: '1px solid var(--glass-border)',
+              boxShadow: '8px 0 40px rgba(15,23,42,0.15)',
             }}
           >
             {/* Menu Header */}
             <div
-              className="flex items-center justify-between px-5 py-4"
+              className="flex items-center justify-between px-6 py-5"
               style={{
-                borderBottom: '1px solid rgba(255,255,255,0.08)',
-                background: 'rgba(255,255,255,0.04)',
+                borderBottom: '1px solid rgba(226,232,240,0.8)',
               }}
             >
-              <div className="flex items-center gap-2.5">
+              <div className="flex items-center gap-3">
                 <div
-                  className="w-9 h-9 rounded-xl flex items-center justify-center"
-                  style={{
-                    background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
-                    boxShadow: '0 4px 14px rgba(59,130,246,0.50)',
-                  }}
+                  className="w-10 h-10 rounded-xl flex items-center justify-center shadow-violet"
+                  style={{ background: 'linear-gradient(135deg, var(--violet-500), var(--violet-700))' }}
                 >
-                  <GraduationCap className="text-white" size={18} />
+                  <GraduationCap className="text-white" size={20} />
                 </div>
-                <span className="font-outfit font-extrabold text-lg text-white tracking-tight">HiSUP</span>
+                <div>
+                  <span className="font-jakarta font-extrabold text-xl text-zinc-900 tracking-tight block leading-none mb-1">HiSUP</span>
+                  <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-violet-600 block">Platform</span>
+                </div>
               </div>
               <button
                 onClick={() => setMobileMenuOpen(false)}
-                className="p-2 rounded-xl text-blue-300 hover:text-white transition-colors"
-                style={{ border: '1px solid rgba(255,255,255,0.10)' }}
+                className="p-2.5 rounded-xl text-zinc-500 hover:text-zinc-900 bg-white shadow-sm border border-zinc-200 transition-all hover:scale-105"
               >
-                <X size={17} />
+                <X size={18} />
               </button>
             </div>
 
-            {/* Mobile Nav Links */}
-            <nav className="flex-1 overflow-y-auto py-3 px-3">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-blue-400/70 px-2 mb-2">Main Menu</p>
-              <ul className="flex flex-col gap-0.5">
-                {(mobileNavItems[user?.role] || []).map(({ to, icon: Icon, label }) => (
+            {/* Mobile Nav Links - NOW SHOWS ALL ITEMS */}
+            <nav className="flex-1 overflow-y-auto py-4 px-4">
+              <p className="text-xs font-bold uppercase tracking-widest text-zinc-400 px-3 mb-3">Main Menu</p>
+              <ul className="flex flex-col gap-1.5">
+                {items.map(({ to, icon: Icon, label }) => (
                   <li key={to}>
                     <NavLink
                       to={to}
                       onClick={() => setMobileMenuOpen(false)}
                       className={({ isActive }) => `
-                        flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-semibold
-                        transition-all duration-200
-                        ${isActive ? 'text-white' : 'text-blue-200/70 hover:text-white'}
+                        flex items-center gap-4 px-4 py-3.5 rounded-xl text-[15px] font-bold
+                        transition-all duration-200 group
+                        ${isActive ? 'text-violet-700 bg-white/80 shadow-sm border border-white' : 'text-zinc-500 hover:text-zinc-900 hover:bg-white/50 border border-transparent'}
                       `}
-                      style={({ isActive }) => isActive ? {
-                        background: 'rgba(59,130,246,0.25)',
-                        border: '1px solid rgba(59,130,246,0.30)',
-                      } : { border: '1px solid transparent' }}
                     >
                       {({ isActive }) => (
                         <>
-                          <Icon size={19} className={isActive ? 'text-blue-300' : 'text-blue-400/60'} />
+                          <Icon size={20} className={`transition-transform duration-200 group-hover:scale-110 ${isActive ? 'text-violet-600' : 'text-zinc-400 group-hover:text-zinc-600'}`} />
                           <span>{label}</span>
+                          {isActive && <div className="ml-auto w-2 h-2 rounded-full bg-violet-500 shadow-[0_0_8px_rgba(99,102,241,0.6)]" />}
                         </>
                       )}
                     </NavLink>
@@ -136,27 +102,26 @@ const AppLayout = () => {
 
             {/* User + Logout */}
             <div
-              className="p-4"
-              style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}
+              className="p-5"
+              style={{ borderTop: '1px solid rgba(226,232,240,0.8)' }}
             >
               <div
-                className="flex items-center gap-3 p-3 rounded-xl mb-2"
-                style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)' }}
+                className="flex items-center gap-3 p-3.5 rounded-2xl mb-3 glass"
+                style={{ background: 'rgba(255,255,255,0.7)' }}
               >
-                <div className="w-9 h-9 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-sm" style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.25)' }}>
+                <div className="w-10 h-10 rounded-full bg-violet-100 text-violet-700 flex items-center justify-center font-bold text-[15px] shadow-sm">
                   {user?.username?.[0]?.toUpperCase()}
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-white">{user?.username}</p>
-                  <p className="text-xs font-semibold text-blue-400">{user?.role}</p>
+                  <p className="text-[15px] font-extrabold text-zinc-900">{user?.username}</p>
+                  <p className="text-xs font-bold text-violet-600 uppercase tracking-wide mt-0.5">{user?.role}</p>
                 </div>
               </div>
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-3 w-full px-3 py-3 rounded-xl text-sm font-semibold text-blue-200/70 hover:text-red-400 transition-all duration-200"
-                style={{ border: '1px solid rgba(239,68,68,0.20)', background: 'rgba(239,68,68,0.08)' }}
+                className="flex items-center justify-center gap-3 w-full px-4 py-3.5 rounded-xl text-[15px] font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-100 transition-all duration-200 group"
               >
-                <LogOut size={17} />
+                <LogOut size={18} className="transition-transform group-hover:-translate-x-1" />
                 <span>Logout</span>
               </button>
             </div>
@@ -165,13 +130,13 @@ const AppLayout = () => {
       )}
 
       {/* ── Main Content ────────────────────────────────── */}
-      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
+      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden relative">
         <Topbar onMenuClick={() => setMobileMenuOpen(true)} />
         <main
-          className="flex-1 overflow-y-auto pb-20 md:pb-0"
-          style={{ padding: 'clamp(1rem, 2vw, 2rem)' }}
+          className="flex-1 overflow-y-auto pb-24 md:pb-6 pt-6"
+          style={{ paddingInline: 'clamp(1.5rem, 3vw, 3rem)' }}
         >
-          <div className="mx-auto max-w-7xl w-full">
+          <div className="mx-auto max-w-[1400px] w-full animate-fade-in-up">
             <Outlet />
           </div>
         </main>
@@ -179,27 +144,26 @@ const AppLayout = () => {
 
       {/* ── Mobile Glass Bottom Nav (iPhone-style) ──────── */}
       <nav
-        className="mobile-bottom-nav"
-        style={{ gap: '0' }}
+        className="mobile-bottom-nav justify-around px-2"
       >
         {bottomItems.map(({ to, icon: Icon, label }) => (
           <NavLink
             key={to}
             to={to}
-            className="flex-1 flex flex-col items-center justify-center gap-1 py-1.5 transition-all duration-200"
+            className="flex flex-col items-center justify-center gap-1.5 p-2 transition-all duration-200 flex-1"
           >
             {({ isActive }) => (
               <>
                 <div
-                  className={`p-1.5 rounded-xl transition-all duration-200 ${isActive ? 'bg-blue-100' : ''}`}
+                  className={`p-2 rounded-xl transition-all duration-300 ${isActive ? 'bg-violet-100 shadow-[0_0_12px_rgba(99,102,241,0.2)] scale-110' : ''}`}
                 >
                   <Icon
-                    size={20}
-                    className={isActive ? 'text-blue-600' : 'text-slate-400'}
+                    size={22}
+                    className={isActive ? 'text-violet-600' : 'text-zinc-400'}
                   />
                 </div>
                 <span
-                  className={`text-[10px] font-semibold leading-none ${isActive ? 'text-blue-600' : 'text-slate-400'}`}
+                  className={`text-[11px] font-bold tracking-wide leading-none ${isActive ? 'text-violet-700' : 'text-zinc-400'}`}
                 >
                   {label}
                 </span>
