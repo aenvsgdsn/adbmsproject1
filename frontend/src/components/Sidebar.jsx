@@ -4,50 +4,50 @@ import { useAuth } from '../context/AuthContext';
 import {
   LayoutDashboard, Users, GraduationCap, BookOpen, CalendarCheck,
   BarChart2, DollarSign, Library, Home, LogOut,
-  ChevronLeft, ChevronRight, ClipboardList
+  ChevronLeft, ChevronRight, ClipboardList, ShieldAlert, Circle
 } from 'lucide-react';
 
 export const navItems = {
   Admin: [
-    { to: '/dashboard',   icon: LayoutDashboard, label: 'Dashboard' },
-    { to: '/students',    icon: GraduationCap,   label: 'Students' },
-    { to: '/faculty',     icon: Users,            label: 'Faculty' },
-    { to: '/courses',     icon: BookOpen,         label: 'Courses' },
-    { to: '/enrollments', icon: ClipboardList,    label: 'Enrollments' },
-    { to: '/attendance',  icon: CalendarCheck,    label: 'Attendance' },
-    { to: '/results',     icon: BarChart2,        label: 'Results' },
-    { to: '/finance',     icon: DollarSign,       label: 'Finance' },
-    { to: '/library',     icon: Library,          label: 'Library' },
-    { to: '/hostel',      icon: Home,             label: 'Hostel' },
-    { to: '/audit-logs',  icon: ClipboardList,    label: 'Audit Logs' },
+    { to: '/dashboard',   icon: LayoutDashboard, label: 'Dashboard'   },
+    { to: '/students',    icon: GraduationCap,   label: 'Students'    },
+    { to: '/faculty',     icon: Users,           label: 'Faculty'     },
+    { to: '/courses',     icon: BookOpen,        label: 'Courses'     },
+    { to: '/enrollments', icon: ClipboardList,   label: 'Enrollments' },
+    { to: '/attendance',  icon: CalendarCheck,   label: 'Attendance'  },
+    { to: '/results',     icon: BarChart2,       label: 'Results'     },
+    { to: '/finance',     icon: DollarSign,      label: 'Finance'     },
+    { to: '/library',     icon: Library,         label: 'Library'     },
+    { to: '/hostel',      icon: Home,            label: 'Hostel'      },
+    { to: '/audit-logs',  icon: ShieldAlert,     label: 'Audit Logs'  },
   ],
   Student: [
-    { to: '/dashboard',   icon: LayoutDashboard, label: 'Dashboard' },
-    { to: '/enrollments', icon: ClipboardList,   label: 'My Courses' },
-    { to: '/attendance',  icon: CalendarCheck,   label: 'Attendance' },
-    { to: '/results',     icon: BarChart2,       label: 'Results' },
-    { to: '/finance',     icon: DollarSign,      label: 'Fees' },
-    { to: '/library',     icon: Library,         label: 'Library' },
-    { to: '/hostel',      icon: Home,            label: 'Hostel' },
+    { to: '/dashboard',   icon: LayoutDashboard, label: 'Dashboard'   },
+    { to: '/enrollments', icon: ClipboardList,   label: 'My Courses'  },
+    { to: '/attendance',  icon: CalendarCheck,   label: 'Attendance'  },
+    { to: '/results',     icon: BarChart2,       label: 'Results'     },
+    { to: '/finance',     icon: DollarSign,      label: 'Fees'        },
+    { to: '/library',     icon: Library,         label: 'Library'     },
+    { to: '/hostel',      icon: Home,            label: 'Hostel'      },
   ],
   Faculty: [
-    { to: '/dashboard',   icon: LayoutDashboard, label: 'Dashboard' },
-    { to: '/courses',     icon: BookOpen,         label: 'My Courses' },
-    { to: '/attendance',  icon: CalendarCheck,    label: 'Attendance' },
-    { to: '/results',     icon: BarChart2,        label: 'Grades' },
+    { to: '/dashboard',   icon: LayoutDashboard, label: 'Dashboard'   },
+    { to: '/courses',     icon: BookOpen,        label: 'My Courses'  },
+    { to: '/attendance',  icon: CalendarCheck,   label: 'Attendance'  },
+    { to: '/results',     icon: BarChart2,       label: 'Grades'      },
   ],
   Finance: [
-    { to: '/dashboard',   icon: LayoutDashboard, label: 'Dashboard' },
-    { to: '/finance',     icon: DollarSign,      label: 'Payments' },
-    { to: '/students',    icon: GraduationCap,   label: 'Students' },
+    { to: '/dashboard',   icon: LayoutDashboard, label: 'Dashboard'   },
+    { to: '/finance',     icon: DollarSign,      label: 'Payments'    },
+    { to: '/students',    icon: GraduationCap,   label: 'Students'    },
   ],
 };
 
-const roleConfig = {
-  Admin:   { color: 'bg-indigo-100 text-indigo-700',    dot: 'bg-indigo-500' },
-  Faculty: { color: 'bg-blue-100 text-blue-700',        dot: 'bg-blue-500' },
-  Student: { color: 'bg-violet-100 text-violet-700',    dot: 'bg-violet-500' },
-  Finance: { color: 'bg-emerald-100 text-emerald-700',  dot: 'bg-emerald-500' },
+const roleBadge = {
+  Admin:   { color: '#7c3aed', bg: 'rgba(124,58,237,0.08)', dot: '#7c3aed'  },
+  Faculty: { color: '#2563eb', bg: 'rgba(37,99,235,0.08)',  dot: '#2563eb'  },
+  Student: { color: '#059669', bg: 'rgba(5,150,105,0.08)',  dot: '#059669'  },
+  Finance: { color: '#d97706', bg: 'rgba(217,119,6,0.08)',  dot: '#d97706'  },
 };
 
 const Sidebar = () => {
@@ -55,92 +55,106 @@ const Sidebar = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const items = navItems[user?.role] || [];
-  const rc = roleConfig[user?.role] || roleConfig.Student;
+  const rb = roleBadge[user?.role] || roleBadge.Student;
 
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
+  const handleLogout = () => { logout(); navigate('/login'); };
 
   return (
     <aside
-      className={`
-        flex-col h-screen sticky top-0 z-40 overflow-visible
-        transition-all duration-300 ease-in-out glass
-        hidden md:flex
-        ${collapsed ? 'w-[88px]' : 'w-72'}
-      `}
+      className="hidden md:flex flex-col h-screen sticky top-0 z-40 overflow-visible transition-all duration-300"
       style={{
-        borderRight: '1px solid var(--glass-border)',
-        boxShadow: '4px 0 24px rgba(15,23,42,0.03)',
+        width: collapsed ? '68px' : '220px',
+        background: 'white',
+        borderRight: '1px solid rgba(0,0,0,0.07)',
+        boxShadow: '1px 0 12px rgba(0,0,0,0.03)',
+        flexShrink: 0,
       }}
     >
-      <div className="relative flex flex-col h-full">
+      <div className="relative flex flex-col h-full overflow-hidden">
 
-        {/* Logo */}
+        {/* ── Logo ── */}
         <div
-          className={`flex items-center gap-4 px-6 py-7 ${collapsed ? 'justify-center px-0' : ''}`}
-          style={{ borderBottom: '1px solid rgba(226,232,240,0.6)' }}
+          className="flex items-center gap-3 py-[18px] px-4"
+          style={{
+            borderBottom: '1px solid rgba(0,0,0,0.06)',
+            justifyContent: collapsed ? 'center' : 'flex-start',
+          }}
         >
           <div
-            className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-violet"
-            style={{ background: 'linear-gradient(135deg, var(--violet-500), var(--violet-700))' }}
+            className="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center"
+            style={{
+              background: 'linear-gradient(135deg, #7c3aed, #4c1d95)',
+              boxShadow: '0 2px 10px rgba(124,58,237,0.28)',
+            }}
           >
-            <GraduationCap className="text-white" size={24} />
+            <GraduationCap size={16} color="white" />
           </div>
           {!collapsed && (
-            <div className="animate-fade-in">
-              <span className="font-extrabold text-2xl text-zinc-900 tracking-tight leading-none block mb-1">
-                HiSUP
-              </span>
-              <span className="text-xs font-bold tracking-[0.2em] uppercase text-violet-600 block">
-                Platform
-              </span>
+            <div className="overflow-hidden">
+              <p
+                className="font-extrabold text-base leading-none tracking-tight"
+                style={{ color: '#0a0a0a', fontFamily: 'Plus Jakarta Sans, sans-serif', whiteSpace: 'nowrap' }}
+              >HiSUP</p>
+              <p
+                className="text-[9px] font-bold uppercase tracking-widest mt-0.5"
+                style={{ color: '#7c3aed', whiteSpace: 'nowrap' }}
+              >PLATFORM</p>
             </div>
           )}
         </div>
 
-        {/* Navigation */}
-        <nav className="flex-1 py-6 overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
+        {/* ── Nav Items ── */}
+        <nav className="flex-1 py-3 overflow-y-auto hide-scrollbar px-2.5">
           {!collapsed && (
-            <div className="px-6 mb-4">
-              <p className="text-xs font-bold uppercase tracking-widest text-zinc-400">
-                Main Menu
-              </p>
-            </div>
+            <p
+              className="text-[10px] font-bold uppercase tracking-widest px-2 mb-2 mt-1"
+              style={{ color: '#d4d4d4' }}
+            >Main Menu</p>
           )}
 
-          <ul className="flex flex-col gap-1.5 px-4">
+          <ul className="flex flex-col gap-0.5">
             {items.map(({ to, icon: Icon, label }) => (
               <li key={to}>
                 <NavLink
                   to={to}
                   title={collapsed ? label : undefined}
-                  className={({ isActive }) => `
-                    flex items-center gap-4 rounded-xl text-[15px] font-bold
-                    transition-all duration-200 group relative
-                    ${collapsed ? 'justify-center px-0 py-4' : 'px-4 py-3.5'}
-                    ${isActive
-                      ? 'text-violet-700 bg-white/60 shadow-sm border border-white'
-                      : 'text-zinc-500 hover:text-zinc-900 hover:bg-white/40 border border-transparent'
-                    }
-                  `}
+                  style={({ isActive }) => ({
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '10px',
+                    padding: collapsed ? '9px 0' : '8px 10px',
+                    justifyContent: collapsed ? 'center' : 'flex-start',
+                    borderRadius: '10px',
+                    fontSize: '13.5px',
+                    fontWeight: isActive ? 600 : 500,
+                    color: isActive ? '#7c3aed' : '#525252',
+                    background: isActive ? 'rgba(124,58,237,0.07)' : 'transparent',
+                    border: isActive ? '1px solid rgba(124,58,237,0.12)' : '1px solid transparent',
+                    textDecoration: 'none',
+                    transition: 'all 150ms ease',
+                    cursor: 'pointer',
+                    position: 'relative',
+                  })}
+                  className="group"
                 >
                   {({ isActive }) => (
                     <>
                       <Icon
-                        size={20}
-                        className={`shrink-0 transition-transform duration-200 group-hover:scale-110 ${
-                          isActive
-                            ? 'text-violet-600'
-                            : 'text-zinc-400 group-hover:text-zinc-600'
-                        }`}
+                        size={16}
+                        style={{
+                          color: isActive ? '#7c3aed' : '#a3a3a3',
+                          flexShrink: 0,
+                          transition: 'color 150ms ease',
+                        }}
                       />
                       {!collapsed && (
-                        <span className="tracking-wide">{label}</span>
+                        <span style={{ whiteSpace: 'nowrap', letterSpacing: '-0.01em' }}>{label}</span>
                       )}
                       {isActive && !collapsed && (
-                        <div className="absolute right-4 w-2 h-2 rounded-full bg-violet-500 shadow-[0_0_8px_rgba(99,102,241,0.6)]" />
+                        <div
+                          className="absolute right-2.5 w-1.5 h-1.5 rounded-full"
+                          style={{ background: '#7c3aed' }}
+                        />
                       )}
                     </>
                   )}
@@ -150,23 +164,30 @@ const Sidebar = () => {
           </ul>
         </nav>
 
-        {/* User Info + Logout */}
-        <div className="p-4" style={{ borderTop: '1px solid rgba(226,232,240,0.6)' }}>
-          {!collapsed && (
+        {/* ── User + Logout ── */}
+        <div className="px-2.5 pb-3 pt-2" style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}>
+          {!collapsed && user && (
             <div
-              className="flex items-center gap-3 mb-3 p-3 rounded-2xl glass"
+              className="flex items-center gap-2.5 px-2.5 py-2.5 rounded-xl mb-1.5"
+              style={{ background: rb.bg }}
             >
               <div
-                className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 text-[15px] font-bold ${rc.color}`}
-                style={{ boxShadow: '0 4px 12px rgba(15,23,42,0.06)' }}
+                className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 text-sm font-bold"
+                style={{ background: rb.color, color: 'white', fontSize: '12px' }}
               >
-                {user?.username?.[0]?.toUpperCase()}
+                {user.username?.[0]?.toUpperCase()}
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-[15px] font-extrabold text-zinc-900 truncate leading-tight">{user?.username}</p>
-                <div className="flex items-center gap-2 mt-1">
-                  <span className={`w-2 h-2 rounded-full ${rc.dot}`} />
-                  <p className="text-xs font-bold text-zinc-500 truncate uppercase tracking-wide">{user?.role}</p>
+                <p
+                  className="font-semibold truncate leading-tight"
+                  style={{ fontSize: '12.5px', color: '#0a0a0a' }}
+                >{user.username}</p>
+                <div className="flex items-center gap-1.5 mt-0.5">
+                  <div className="w-1.5 h-1.5 rounded-full" style={{ background: rb.dot }} />
+                  <p
+                    className="uppercase font-bold tracking-wider"
+                    style={{ fontSize: '9.5px', color: '#a3a3a3' }}
+                  >{user.role}</p>
                 </div>
               </div>
             </div>
@@ -175,37 +196,56 @@ const Sidebar = () => {
           <button
             onClick={handleLogout}
             title={collapsed ? 'Logout' : undefined}
-            className={`flex items-center gap-3 w-full rounded-xl text-[15px] font-bold
-              text-zinc-500 hover:text-red-600 transition-all duration-200
-              ${collapsed ? 'justify-center py-4' : 'px-4 py-3.5'}
-            `}
-            style={{ border: '1px solid transparent' }}
+            className="flex items-center w-full rounded-xl transition-all duration-150"
+            style={{
+              gap: '10px',
+              padding: collapsed ? '9px 0' : '8px 10px',
+              justifyContent: collapsed ? 'center' : 'flex-start',
+              color: '#a3a3a3',
+              background: 'transparent',
+              border: '1px solid transparent',
+              fontSize: '13.5px',
+              fontWeight: 500,
+              cursor: 'pointer',
+              fontFamily: 'Inter, sans-serif',
+            }}
             onMouseEnter={e => {
-              e.currentTarget.style.background = 'rgba(239,68,68,0.08)';
-              e.currentTarget.style.borderColor = 'rgba(239,68,68,0.2)';
+              e.currentTarget.style.background = 'rgba(220,38,38,0.06)';
+              e.currentTarget.style.color = '#dc2626';
+              e.currentTarget.style.borderColor = 'rgba(220,38,38,0.12)';
             }}
             onMouseLeave={e => {
               e.currentTarget.style.background = 'transparent';
+              e.currentTarget.style.color = '#a3a3a3';
               e.currentTarget.style.borderColor = 'transparent';
             }}
           >
-            <LogOut size={20} className="shrink-0 transition-transform group-hover:-translate-x-1" />
+            <LogOut size={15} style={{ flexShrink: 0 }} />
             {!collapsed && <span>Logout</span>}
           </button>
         </div>
       </div>
 
-      {/* Collapse Toggle */}
+      {/* ── Collapse Toggle ── */}
       <button
         onClick={() => setCollapsed(!collapsed)}
-        className="absolute -right-4 top-10 z-50 w-8 h-8 rounded-full
-          flex items-center justify-center text-zinc-500 hover:text-violet-600 transition-all duration-200
-          hover:scale-110 glass border border-zinc-200"
+        className="absolute -right-3 top-[60px] z-50 w-6 h-6 rounded-full flex items-center justify-center transition-all duration-200"
         style={{
-          boxShadow: '0 4px 12px rgba(15,23,42,0.08)',
+          background: 'white',
+          border: '1px solid rgba(0,0,0,0.10)',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+          color: '#525252',
+        }}
+        onMouseEnter={e => {
+          e.currentTarget.style.background = '#7c3aed';
+          e.currentTarget.style.color = 'white';
+        }}
+        onMouseLeave={e => {
+          e.currentTarget.style.background = 'white';
+          e.currentTarget.style.color = '#525252';
         }}
       >
-        {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+        {collapsed ? <ChevronRight size={12} /> : <ChevronLeft size={12} />}
       </button>
     </aside>
   );

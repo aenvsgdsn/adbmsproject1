@@ -10,88 +10,93 @@ const AppLayout = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const items = navItems[user?.role] || [];
-  
-  // Only show the first 5 items on the bottom nav to prevent crowding
   const bottomItems = items.slice(0, 5);
 
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-    setMobileMenuOpen(false);
-  };
+  const handleLogout = () => { logout(); navigate('/login'); setMobileMenuOpen(false); };
 
   return (
-    <div className="flex h-screen overflow-hidden font-inter">
+    <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', fontFamily: 'Inter, system-ui, sans-serif', background: '#f7f7f7' }}>
 
-      {/* ── Desktop Sidebar ─────────────────────────────── */}
+      {/* Desktop Sidebar */}
       <Sidebar />
 
-      {/* ── Mobile Full-Screen Menu Overlay ─────────────── */}
+      {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
         <>
-          {/* Backdrop */}
           <div
             className="fixed inset-0 z-50 md:hidden animate-fade-in"
-            style={{ background: 'rgba(15,23,42,0.50)', backdropFilter: 'blur(8px)' }}
+            style={{ background: 'rgba(0,0,0,0.40)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' }}
             onClick={() => setMobileMenuOpen(false)}
           />
-
-          {/* Slide-in Menu Panel */}
           <div
-            className="fixed inset-y-0 left-0 z-50 w-80 flex flex-col md:hidden animate-slide-in-left glass"
+            className="fixed inset-y-0 left-0 z-50 w-72 flex flex-col md:hidden animate-slide-up"
             style={{
-              background: 'rgba(255,255,255,0.85)',
-              borderRight: '1px solid var(--glass-border)',
-              boxShadow: '8px 0 40px rgba(15,23,42,0.15)',
+              background: 'rgba(255,255,255,0.96)',
+              backdropFilter: 'blur(24px)',
+              WebkitBackdropFilter: 'blur(24px)',
+              borderRight: '1px solid rgba(0,0,0,0.07)',
+              boxShadow: '8px 0 40px rgba(0,0,0,0.12)',
             }}
           >
-            {/* Menu Header */}
+            {/* Header */}
             <div
-              className="flex items-center justify-between px-6 py-5"
               style={{
-                borderBottom: '1px solid rgba(226,232,240,0.8)',
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                padding: '18px 20px', borderBottom: '1px solid rgba(0,0,0,0.06)',
               }}
             >
-              <div className="flex items-center gap-3">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center shadow-violet"
-                  style={{ background: 'linear-gradient(135deg, var(--violet-500), var(--violet-700))' }}
+                  style={{
+                    width: '36px', height: '36px', borderRadius: '10px',
+                    background: 'linear-gradient(135deg, #7c3aed, #4c1d95)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    boxShadow: '0 3px 12px rgba(124,58,237,0.28)',
+                  }}
                 >
-                  <GraduationCap className="text-white" size={20} />
+                  <GraduationCap size={18} color="white" />
                 </div>
                 <div>
-                  <span className="font-jakarta font-extrabold text-xl text-zinc-900 tracking-tight block leading-none mb-1">HiSUP</span>
-                  <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-violet-600 block">Platform</span>
+                  <p style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, fontSize: '16px', color: '#0a0a0a', lineHeight: 1, letterSpacing: '-0.025em' }}>HiSUP</p>
+                  <p style={{ fontSize: '9px', fontWeight: 700, color: '#7c3aed', textTransform: 'uppercase', letterSpacing: '0.2em', marginTop: '2px' }}>PLATFORM</p>
                 </div>
               </div>
               <button
                 onClick={() => setMobileMenuOpen(false)}
-                className="p-2.5 rounded-xl text-zinc-500 hover:text-zinc-900 bg-white shadow-sm border border-zinc-200 transition-all hover:scale-105"
+                style={{
+                  background: '#f5f5f5', border: '1px solid rgba(0,0,0,0.08)', borderRadius: '8px',
+                  cursor: 'pointer', padding: '6px', display: 'flex', color: '#525252',
+                }}
               >
-                <X size={18} />
+                <X size={16} />
               </button>
             </div>
 
-            {/* Mobile Nav Links - NOW SHOWS ALL ITEMS */}
-            <nav className="flex-1 overflow-y-auto py-4 px-4">
-              <p className="text-xs font-bold uppercase tracking-widest text-zinc-400 px-3 mb-3">Main Menu</p>
-              <ul className="flex flex-col gap-1.5">
+            {/* Nav */}
+            <nav style={{ flex: 1, overflowY: 'auto', padding: '12px 12px' }}>
+              <p style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#d4d4d4', padding: '0 8px', marginBottom: '8px' }}>
+                Main Menu
+              </p>
+              <ul style={{ display: 'flex', flexDirection: 'column', gap: '2px', listStyle: 'none' }}>
                 {items.map(({ to, icon: Icon, label }) => (
                   <li key={to}>
                     <NavLink
                       to={to}
                       onClick={() => setMobileMenuOpen(false)}
-                      className={({ isActive }) => `
-                        flex items-center gap-4 px-4 py-3.5 rounded-xl text-[15px] font-bold
-                        transition-all duration-200 group
-                        ${isActive ? 'text-violet-700 bg-white/80 shadow-sm border border-white' : 'text-zinc-500 hover:text-zinc-900 hover:bg-white/50 border border-transparent'}
-                      `}
+                      style={({ isActive }) => ({
+                        display: 'flex', alignItems: 'center', gap: '12px',
+                        padding: '10px 12px', borderRadius: '10px',
+                        fontSize: '14px', fontWeight: isActive ? 600 : 500,
+                        color: isActive ? '#7c3aed' : '#525252',
+                        background: isActive ? 'rgba(124,58,237,0.07)' : 'transparent',
+                        border: isActive ? '1px solid rgba(124,58,237,0.12)' : '1px solid transparent',
+                        textDecoration: 'none', transition: 'all 150ms ease',
+                      })}
                     >
                       {({ isActive }) => (
                         <>
-                          <Icon size={20} className={`transition-transform duration-200 group-hover:scale-110 ${isActive ? 'text-violet-600' : 'text-zinc-400 group-hover:text-zinc-600'}`} />
+                          <Icon size={17} style={{ color: isActive ? '#7c3aed' : '#a3a3a3', flexShrink: 0 }} />
                           <span>{label}</span>
-                          {isActive && <div className="ml-auto w-2 h-2 rounded-full bg-violet-500 shadow-[0_0_8px_rgba(99,102,241,0.6)]" />}
                         </>
                       )}
                     </NavLink>
@@ -101,72 +106,89 @@ const AppLayout = () => {
             </nav>
 
             {/* User + Logout */}
-            <div
-              className="p-5"
-              style={{ borderTop: '1px solid rgba(226,232,240,0.8)' }}
-            >
+            <div style={{ padding: '12px', borderTop: '1px solid rgba(0,0,0,0.06)' }}>
               <div
-                className="flex items-center gap-3 p-3.5 rounded-2xl mb-3 glass"
-                style={{ background: 'rgba(255,255,255,0.7)' }}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px',
+                  borderRadius: '10px', background: '#fafafa', border: '1px solid rgba(0,0,0,0.06)', marginBottom: '6px',
+                }}
               >
-                <div className="w-10 h-10 rounded-full bg-violet-100 text-violet-700 flex items-center justify-center font-bold text-[15px] shadow-sm">
+                <div style={{
+                  width: '32px', height: '32px', borderRadius: '8px', background: '#7c3aed',
+                  color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '12px', fontWeight: 700, flexShrink: 0,
+                }}>
                   {user?.username?.[0]?.toUpperCase()}
                 </div>
                 <div>
-                  <p className="text-[15px] font-extrabold text-zinc-900">{user?.username}</p>
-                  <p className="text-xs font-bold text-violet-600 uppercase tracking-wide mt-0.5">{user?.role}</p>
+                  <p style={{ fontSize: '13px', fontWeight: 600, color: '#0a0a0a' }}>{user?.username}</p>
+                  <p style={{ fontSize: '10px', fontWeight: 700, color: '#a3a3a3', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{user?.role}</p>
                 </div>
               </div>
               <button
                 onClick={handleLogout}
-                className="flex items-center justify-center gap-3 w-full px-4 py-3.5 rounded-xl text-[15px] font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-100 transition-all duration-200 group"
+                style={{
+                  display: 'flex', alignItems: 'center', gap: '10px', width: '100%',
+                  padding: '9px 12px', borderRadius: '10px', fontSize: '13.5px', fontWeight: 500,
+                  color: '#dc2626', background: 'rgba(220,38,38,0.06)', border: '1px solid rgba(220,38,38,0.10)',
+                  cursor: 'pointer', fontFamily: 'Inter, sans-serif',
+                }}
               >
-                <LogOut size={18} className="transition-transform group-hover:-translate-x-1" />
-                <span>Logout</span>
+                <LogOut size={15} /> Logout
               </button>
             </div>
           </div>
         </>
       )}
 
-      {/* ── Main Content ────────────────────────────────── */}
-      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden relative">
+      {/* Main Content */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, height: '100vh', overflow: 'hidden' }}>
         <Topbar onMenuClick={() => setMobileMenuOpen(true)} />
         <main
-          className="flex-1 overflow-y-auto pb-24 md:pb-6 pt-6"
-          style={{ paddingInline: 'clamp(1.5rem, 3vw, 3rem)' }}
+          style={{
+            flex: 1, overflowY: 'auto', paddingBottom: '80px',
+            paddingTop: '24px', paddingInline: 'clamp(1.25rem, 2.5vw, 2.5rem)',
+          }}
         >
-          <div className="mx-auto max-w-[1400px] w-full animate-fade-in-up">
+          <div style={{ maxWidth: '1400px', margin: '0 auto' }} className="animate-fade-in">
             <Outlet />
           </div>
         </main>
       </div>
 
-      {/* ── Mobile Glass Bottom Nav (iPhone-style) ──────── */}
+      {/* Mobile Bottom Nav */}
       <nav
-        className="md:hidden fixed bottom-0 inset-x-0 bg-white/90 backdrop-blur-xl border-t border-zinc-200 flex justify-around px-2 pb-6 pt-2 z-50 shadow-[0_-8px_30px_rgba(0,0,0,0.06)]"
+        className="md:hidden fixed bottom-0 inset-x-0 z-50"
+        style={{
+          background: 'rgba(255,255,255,0.92)',
+          backdropFilter: 'blur(20px) saturate(1.8)',
+          WebkitBackdropFilter: 'blur(20px) saturate(1.8)',
+          borderTop: '1px solid rgba(0,0,0,0.07)',
+          display: 'flex', justifyContent: 'space-around',
+          padding: '8px 8px 20px',
+          boxShadow: '0 -4px 20px rgba(0,0,0,0.06)',
+        }}
       >
         {bottomItems.map(({ to, icon: Icon, label }) => (
           <NavLink
             key={to}
             to={to}
-            className="flex flex-col items-center justify-center gap-1.5 p-2 transition-all duration-200 flex-1"
+            style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', padding: '6px 12px', textDecoration: 'none', flex: 1 }}
           >
             {({ isActive }) => (
               <>
-                <div
-                  className={`p-2 rounded-xl transition-all duration-300 ${isActive ? 'bg-violet-100 shadow-[0_0_12px_rgba(99,102,241,0.2)] scale-110' : ''}`}
-                >
-                  <Icon
-                    size={22}
-                    className={isActive ? 'text-violet-600' : 'text-zinc-400'}
-                  />
+                <div style={{
+                  padding: '6px', borderRadius: '10px',
+                  background: isActive ? 'rgba(124,58,237,0.10)' : 'transparent',
+                  transition: 'all 200ms ease',
+                }}>
+                  <Icon size={20} style={{ color: isActive ? '#7c3aed' : '#a3a3a3' }} />
                 </div>
-                <span
-                  className={`text-[11px] font-bold tracking-wide leading-none ${isActive ? 'text-violet-700' : 'text-zinc-400'}`}
-                >
-                  {label}
-                </span>
+                <span style={{
+                  fontSize: '10px', fontWeight: 600, lineHeight: 1,
+                  color: isActive ? '#7c3aed' : '#a3a3a3',
+                  letterSpacing: '-0.01em',
+                }}>{label}</span>
               </>
             )}
           </NavLink>

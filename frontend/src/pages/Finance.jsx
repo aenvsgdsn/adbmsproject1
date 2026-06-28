@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { getStudentFees, getPendingPayments, approvePayment, rejectPayment, getFinanceDashboard, assignStudentFee, getStudents, getPrograms, createFeeStructure, getFeeStructures } from '../api';
+import { getStudentFees, getPendingPayments, approvePayment, rejectPayment, getFinanceDashboard, assignStudentFee, getStudents, getPrograms, createFeeStructure, getFeeStructures, submitPayment } from '../api';
 import { DollarSign, Clock, TrendingUp, Users, Plus, CheckCircle, XCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { PageHeader, StatCard, SectionCard, TableWrapper, Modal, ModalFooter, FormField, EmptyState, Spinner } from '../components/UI';
@@ -19,8 +19,11 @@ const Finance = () => {
   const [loading, setLoading]             = useState(true);
   const [showFeeModal, setShowFeeModal]   = useState(false);
   const [showAssignModal, setShowAssignModal] = useState(false);
+  const [showPayModal, setShowPayModal]   = useState(false);
+  const [selectedFee, setSelectedFee]     = useState(null);
   const [feeForm, setFeeForm]             = useState({ program_id: '', semester: '', amount: '' });
   const [assignForm, setAssignForm]       = useState({ student_id: '', semester: '' });
+  const [payForm, setPayForm]             = useState({ amount: '', method: 'Bank Transfer' });
   const [feeStructures, setFeeStructures] = useState([]);
   const [students, setStudents]           = useState([]);
   const [programs, setPrograms]           = useState([]);
@@ -67,6 +70,21 @@ const Finance = () => {
     try { await assignStudentFee(assignForm); toast.success('Fee assigned!'); setShowAssignModal(false); setAssignForm({ student_id: '', semester: '' }); load(); }
     catch (err) { toast.error(err?.response?.data?.error || 'Failed to assign fee.'); }
   };
+  const handlePayFee = async (e) => {
+    e.preventDefault();
+    try { 
+      await submitPayment({ 
+        student_id: user.student_id, 
+        student_fee_id: selectedFee.student_fee_id, 
+        amount: payForm.amount, 
+        method: payForm.method 
+      }); 
+      toast.success('Payment submitted! Awaiting verification.'); 
+      setShowPayModal(false); 
+      load(); 
+    }
+    catch (err) { toast.error(err?.response?.data?.error || 'Failed to submit payment.'); }
+  };
 
   return (
     <div className="animate-fade-in">
@@ -85,9 +103,9 @@ const Finance = () => {
         </div>
       )}
 
-      {/* Payments Table */}
+      {/* Payments / Fees Table */}
       <SectionCard 
-        title="Pending Verifications" 
+        title={isFinance ? "Pending Verifications" : "My Fees"} 
         className="mb-7"
         actions={isFinance && (
           <button id="assign-fee-btn" onClick={() => setShowAssignModal(true)} className="btn btn-secondary shrink-0">
@@ -96,30 +114,30 @@ const Finance = () => {
         )}
       >
         {loading ? <Spinner /> : (
-          <TableWrapper>
-            <thead>
-              <tr>
-                <th>Student</th>
-                <th>Roll No.</th>
-                <th>Amount</th>
-                <th>Method</th>
-                <th>Status</th>
-                <th>Date</th>
-                {isFinance && <th className="text-right">Actions</th>}
-              </tr>
-            </thead>
-            <tbody>
-              {payments.length === 0 ? (
-                <tr><td colSpan={7}><EmptyState icon={DollarSign} title="No pending payments" subtitle="All payments have been processed." /></td></tr>
-              ) : payments.map(p => (
-                <tr key={p.payment_id}>
-                  <td><span className="font-semibold text-slate-800">{p.students?.user_accounts?.username}</span></td>
-                  <td><code className="text-xs font-mono text-slate-600">{p.students?.roll_number}</code></td>
-                  <td><span className="font-bold text-slate-900">PKR {Number(p.amount).toLocaleString()}</span></td>
-                  <td><span className="badge badge-gray">{p.method}</span></td>
-                  <td><span className={`badge ${STATUS_BADGE[p.status] || 'badge-gray'}`}>{p.status}</span></td>
-                  <td className="text-slate-400 text-xs">{new Date(p.created_at).toLocaleDateString()}</td>
-                  {isFinance && (
+          isFinance ? (
+            <TableWrapper>
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Roll No.</th>
+                  <th>Amount</th>
+                  <th>Method</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                  <th className="text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {payments.length === 0 ? (
+                  <tr><td colSpan={7}><EmptyState icon={DollarSign} title="No pending payments" subtitle="All payments have been processed." /></td></tr>
+                ) : payments.map(p => (
+                  <tr key={p.payment_id}>
+                    <td><span className="font-semibold text-slate-800">{p.students?.user_accounts?.username}</span></td>
+                    <td><code className="text-xs font-mono text-slate-600">{p.students?.roll_number}</code></td>
+                    <td><span className="font-bold text-slate-900">PKR {Number(p.amount).toLocaleString()}</span></td>
+                    <td><span className="badge badge-gray">{p.method}</span></td>
+                    <td><span className={`badge ${STATUS_BADGE[p.status] || 'badge-gray'}`}>{p.status}</span></td>
+                    <td className="text-slate-400 text-xs">{new Date(p.created_at).toLocaleDateString()}</td>
                     <td className="text-right">
                       {p.status === 'Pending' ? (
                         <div className="grid grid-cols-2 gap-2 w-full max-w-[200px] ml-auto">
@@ -132,11 +150,47 @@ const Finance = () => {
                         </div>
                       ) : <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Processed</span>}
                     </td>
-                  )}
+                  </tr>
+                ))}
+              </tbody>
+            </TableWrapper>
+          ) : (
+            <TableWrapper>
+              <thead>
+                <tr>
+                  <th>Semester</th>
+                  <th>Total Amount</th>
+                  <th>Paid</th>
+                  <th>Remaining</th>
+                  <th>Status</th>
+                  <th className="text-right">Action</th>
                 </tr>
-              ))}
-            </tbody>
-          </TableWrapper>
+              </thead>
+              <tbody>
+                {payments.length === 0 ? (
+                  <tr><td colSpan={6}><EmptyState icon={DollarSign} title="No fee records" subtitle="You have no assigned fees." /></td></tr>
+                ) : payments.map(fee => (
+                  <tr key={fee.student_fee_id}>
+                    <td><span className="font-semibold text-slate-800">{fee.semester}</span></td>
+                    <td><span className="font-bold text-slate-900">PKR {Number(fee.total_amount).toLocaleString()}</span></td>
+                    <td><span className="text-emerald-600 font-medium">PKR {Number(fee.paid).toLocaleString()}</span></td>
+                    <td><span className="text-rose-600 font-bold">PKR {Number(fee.remaining).toLocaleString()}</span></td>
+                    <td><span className={`badge ${STATUS_BADGE[fee.status] || 'badge-gray'}`}>{fee.status}</span></td>
+                    <td className="text-right">
+                      {fee.remaining > 0 ? (
+                        <button 
+                          onClick={() => { setSelectedFee(fee); setPayForm({ amount: fee.remaining, method: 'Bank Transfer' }); setShowPayModal(true); }}
+                          className="btn bg-blue-500 hover:bg-blue-600 text-white py-1.5 px-3 rounded-lg text-xs font-bold"
+                        >
+                          Pay Fee
+                        </button>
+                      ) : <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Cleared</span>}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </TableWrapper>
+          )
         )}
       </SectionCard>
 
@@ -212,6 +266,25 @@ const Finance = () => {
               <input className="form-input" placeholder="e.g. Fall 2026" required value={assignForm.semester} onChange={e => setAssignForm({ ...assignForm, semester: e.target.value })} />
             </FormField>
             <ModalFooter onCancel={() => setShowAssignModal(false)} submitLabel="Assign Fee" />
+          </form>
+        </Modal>
+      )}
+
+      {/* Pay Fee Modal (Student) */}
+      {showPayModal && (
+        <Modal title="Pay Fee" onClose={() => setShowPayModal(false)}>
+          <form onSubmit={handlePayFee} className="space-y-4">
+            <FormField label="Amount to Pay (PKR)">
+              <input type="number" className="form-input" required value={payForm.amount} onChange={e => setPayForm({ ...payForm, amount: e.target.value })} max={selectedFee?.remaining} min="1" />
+            </FormField>
+            <FormField label="Payment Method">
+              <select className="form-input form-select" required value={payForm.method} onChange={e => setPayForm({ ...payForm, method: e.target.value })}>
+                <option value="Bank Transfer">Bank Transfer</option>
+                <option value="Credit Card">Credit Card</option>
+                <option value="Cash">Cash</option>
+              </select>
+            </FormField>
+            <ModalFooter onCancel={() => setShowPayModal(false)} submitLabel="Submit Payment" />
           </form>
         </Modal>
       )}
