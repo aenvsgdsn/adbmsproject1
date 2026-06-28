@@ -27,10 +27,16 @@ function App() {
           toastOptions={{
             duration: 3500,
             style: {
-              borderRadius: '6px',
+              borderRadius: '10px',
               fontSize: '13px',
               fontFamily: 'Inter, sans-serif',
+              fontWeight: 500,
+              border: '1px solid rgba(0,0,0,0.08)',
+              boxShadow: '0 8px 24px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06)',
+              padding: '10px 14px',
             },
+            success: { iconTheme: { primary: '#16a34a', secondary: 'white' } },
+            error:   { iconTheme: { primary: '#dc2626', secondary: 'white' } },
           }}
         />
         <Routes>

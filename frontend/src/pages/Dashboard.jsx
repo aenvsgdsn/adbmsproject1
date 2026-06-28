@@ -1,338 +1,288 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { getAdminDashboard, getStudentDashboard, getFacultyDashboard } from '../api';
-import { Smartphone, Monitor, Layout, PieChart, ShoppingCart, Database, GraduationCap, DollarSign, BookOpen, Library, Home, TrendingUp, Calendar, Bell, Plus, MoreHorizontal, LayoutGrid, List, Users } from 'lucide-react';
-import { format } from 'date-fns';
-import { BoardtoCard, Spinner } from '../components/UI';
+import {
+  Users, GraduationCap, BookOpen, Library, Home, TrendingUp,
+  DollarSign, Layout, Monitor, BarChart2, Activity, Award,
+  ArrowUpRight, ArrowDownRight, Minus
+} from 'lucide-react';
+import { Spinner } from '../components/UI';
 
-/* ─── Shared Filter Row (Boardto Style) ───────────────────── */
-const FilterRow = ({ activeFilter, setActiveFilter, total }) => {
-  const filters = [
-    { id: 'all', label: 'All', count: total || 0 },
-    { id: 'started', label: 'Started', count: 20 },
-    { id: 'approval', label: 'Approval', count: 15 },
-    { id: 'completed', label: 'Completed', count: 34 },
-  ];
+
+/* ─── Liquid Glass Stat Card ─────────────────────────────── */
+const GlassStatCard = ({ label, value, icon: Icon, sub, trend, color = '#7c3aed' }) => {
+  const trendIcon = trend > 0 ? ArrowUpRight : trend < 0 ? ArrowDownRight : Minus;
+  const trendColor = trend > 0 ? '#16a34a' : trend < 0 ? '#dc2626' : '#a3a3a3';
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 animate-fade-in gap-4">
-      <div className="flex items-center gap-3 overflow-x-auto pb-2 sm:pb-0 hide-scrollbar">
-        {filters.map((f) => (
-          <button
-            key={f.id}
-            onClick={() => setActiveFilter(f.id)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold transition-colors whitespace-nowrap ${
-              activeFilter === f.id
-                ? 'bg-zinc-100 text-zinc-900'
-                : 'text-zinc-500 hover:text-zinc-800'
-            }`}
+    <div
+      className="animate-fade-in card-hover"
+      style={{
+        background: 'rgba(255,255,255,0.92)',
+        backdropFilter: 'blur(20px) saturate(1.8)',
+        WebkitBackdropFilter: 'blur(20px) saturate(1.8)',
+        border: '1px solid rgba(255,255,255,0.95)',
+        boxShadow: '0 4px 24px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.90)',
+        borderRadius: '16px',
+        padding: '20px 22px',
+        transition: 'all 200ms ease',
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '14px' }}>
+        <div
+          style={{
+            width: '40px', height: '40px', borderRadius: '10px',
+            background: `${color}10`, border: `1px solid ${color}18`,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}
+        >
+          <Icon size={18} style={{ color }} />
+        </div>
+        {trend !== undefined && (
+          <div
+            style={{
+              display: 'flex', alignItems: 'center', gap: '3px',
+              fontSize: '11px', fontWeight: 700, color: trendColor,
+              background: `${trendColor}10`, padding: '3px 8px', borderRadius: '99px',
+            }}
           >
-            {f.label}
-            {f.id === 'all' && (
-              <span className={`px-2 py-0.5 rounded-full text-xs ${activeFilter === 'all' ? 'bg-[#00b4d8] text-white' : 'bg-zinc-200 text-zinc-600'}`}>
-                {f.count}
-              </span>
-            )}
-            {f.id !== 'all' && (
-              <span className="px-2 py-0.5 rounded-full text-xs bg-zinc-100 text-zinc-500">
-                {f.count}
-              </span>
-            )}
-          </button>
-        ))}
+            {React.createElement(trendIcon, { size: 11 })}
+            {Math.abs(trend)}%
+          </div>
+        )}
       </div>
-      <div className="flex items-center gap-2">
-        <button className="flex items-center gap-2 px-3 py-2 border border-zinc-200 rounded-lg text-sm font-bold text-zinc-600 hover:bg-zinc-50">
-          <MoreHorizontal size={16} /> More
-        </button>
-        <button className="p-2 border border-zinc-200 rounded-lg text-zinc-600 hover:bg-zinc-50">
-          <LayoutGrid size={16} />
-        </button>
-        <button className="p-2 border border-zinc-200 bg-[#00b4d8] text-white rounded-lg shadow-sm">
-          <List size={16} />
-        </button>
+      <p style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#a3a3a3', marginBottom: '6px' }}>
+        {label}
+      </p>
+      <p style={{ fontSize: '28px', fontWeight: 800, color: '#0a0a0a', letterSpacing: '-0.04em', fontFamily: 'Plus Jakarta Sans, sans-serif', lineHeight: 1 }}>
+        {value ?? '—'}
+      </p>
+      {sub && <p style={{ fontSize: '12px', color: '#a3a3a3', marginTop: '6px', fontWeight: 450 }}>{sub}</p>}
+    </div>
+  );
+};
+
+/* ─── Progress Row ──────────────────────────────────────── */
+const ProgressRow = ({ label, value, max, color = '#7c3aed' }) => {
+  const pct = Math.min(100, Math.round((value / max) * 100)) || 0;
+  return (
+    <div style={{ marginBottom: '14px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+        <span style={{ fontSize: '13px', fontWeight: 500, color: '#525252' }}>{label}</span>
+        <span style={{ fontSize: '12px', fontWeight: 700, color: '#0a0a0a' }}>{value}</span>
+      </div>
+      <div style={{ height: '5px', background: '#f0f0f0', borderRadius: '99px', overflow: 'hidden' }}>
+        <div style={{ height: '100%', width: `${pct}%`, background: color, borderRadius: '99px', transition: 'width 600ms ease' }} />
       </div>
     </div>
   );
 };
 
+/* ─── Glass Panel ────────────────────────────────────────── */
+const GlassPanel = ({ children, title, action }) => (
+  <div style={{
+    background: 'rgba(255,255,255,0.88)',
+    backdropFilter: 'blur(20px) saturate(1.8)',
+    WebkitBackdropFilter: 'blur(20px) saturate(1.8)',
+    border: '1px solid rgba(0,0,0,0.07)',
+    boxShadow: '0 2px 16px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.90)',
+    borderRadius: '16px',
+    overflow: 'hidden',
+  }}>
+    {(title || action) && (
+      <div style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '14px 18px', borderBottom: '1px solid rgba(0,0,0,0.06)',
+      }}>
+        <p style={{ fontSize: '13.5px', fontWeight: 700, color: '#0a0a0a', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '-0.02em' }}>{title}</p>
+        {action}
+      </div>
+    )}
+    <div style={{ padding: '16px 18px' }}>{children}</div>
+  </div>
+);
 
-/* ─── Admin Dashboard (Boardto Layout) ────────────────────── */
+/* ─── Mini Bar Chart ─────────────────────────────────────── */
+const MiniBar = ({ data, color = '#7c3aed' }) => {
+  const max = Math.max(...data);
+  return (
+    <div style={{ display: 'flex', alignItems: 'flex-end', gap: '4px', height: '56px' }}>
+      {data.map((v, i) => (
+        <div key={i} style={{ flex: 1, borderRadius: '3px 3px 0 0', background: i === data.length - 1 ? color : `${color}25`, height: `${(v / max) * 100}%`, minHeight: '4px', transition: `height 600ms ease ${i * 40}ms` }} />
+      ))}
+    </div>
+  );
+};
+
+
+/* ─── Admin Dashboard ─────────────────────────────────────── */
 const AdminDashboard = () => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState('all');
 
   useEffect(() => {
-    getAdminDashboard()
-      .then(({ data }) => setStats(data))
-      .catch(() => {})
-      .finally(() => setLoading(false));
+    getAdminDashboard().then(({ data }) => setStats(data)).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
   if (loading) return <Spinner />;
 
-  // Mapping Admin Stats to Boardto Cards
-  const cards = [
-    {
-      title: 'Student Admissions',
-      subtitle: 'Admissions Team',
-      icon: Smartphone,
-      iconColorClass: 'icon-pink',
-      daysLeft: '1 Weeks Left',
-      progress: Math.min(100, Math.round(((stats?.total_students || 0) / 5000) * 100)) || 34,
-      avatars: ['https://i.pravatar.cc/100?img=1', 'https://i.pravatar.cc/100?img=2', 'https://i.pravatar.cc/100?img=3'],
-    },
-    {
-      title: 'Faculty Management',
-      subtitle: 'HR Department',
-      icon: Monitor,
-      iconColorClass: 'icon-green',
-      daysLeft: '3 Weeks Left',
-      progress: Math.min(100, Math.round(((stats?.total_faculty || 0) / 200) * 100)) || 76,
-      avatars: ['https://i.pravatar.cc/100?img=4'],
-    },
-    {
-      title: 'Active Courses',
-      subtitle: 'Academic Team',
-      icon: Layout,
-      iconColorClass: 'icon-blue',
-      daysLeft: '2 Days Left',
-      progress: Math.min(100, Math.round(((stats?.total_courses || 0) / 100) * 100)) || 4,
-      avatars: ['https://i.pravatar.cc/100?img=5', 'https://i.pravatar.cc/100?img=6', 'https://i.pravatar.cc/100?img=7'],
-    },
-    {
-      title: 'Revenue Overview',
-      subtitle: 'Finance Team',
-      icon: PieChart,
-      iconColorClass: 'icon-orange',
-      daysLeft: '1 Month Left',
-      progress: stats?.total_revenue ? 90 : 10,
-      avatars: ['https://i.pravatar.cc/100?img=8', 'https://i.pravatar.cc/100?img=9'],
-    },
-    {
-      title: 'Library System',
-      subtitle: 'Library Staff',
-      icon: Database,
-      iconColorClass: 'icon-purple',
-      daysLeft: '2 Month Left',
-      progress: Math.min(100, Math.round(((stats?.available_books || 0) / 10000) * 100)) || 96,
-      avatars: ['https://i.pravatar.cc/100?img=10', 'https://i.pravatar.cc/100?img=11', 'https://i.pravatar.cc/100?img=12'],
-    },
-    {
-      title: 'Hostel Occupancy',
-      subtitle: 'Campus Operations',
-      icon: Home,
-      iconColorClass: 'icon-red',
-      daysLeft: '11 Days Left',
-      progress: Math.min(100, Math.round(((stats?.hostel_occupancy || 0) / (stats?.total_hostel_capacity || 1)) * 100)) || 24,
-      avatars: ['https://i.pravatar.cc/100?img=13', 'https://i.pravatar.cc/100?img=14'],
-    },
-  ];
-
   return (
-    <div>
-      <FilterRow activeFilter={filter} setActiveFilter={setFilter} total={60} />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {cards.map((card, i) => (
-          <BoardtoCard key={i} {...card} />
-        ))}
+    <div className="animate-fade-in">
+      {/* Stat Grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '14px', marginBottom: '22px' }}>
+        <GlassStatCard label="Total Students"  value={stats?.total_students?.toLocaleString() ?? '—'} icon={GraduationCap} sub="Enrolled this year"      color="#7c3aed" trend={12} />
+        <GlassStatCard label="Faculty Members" value={stats?.total_faculty ?? '—'}                    icon={Users}         sub="Across departments"     color="#2563eb" trend={4}  />
+        <GlassStatCard label="Active Courses"  value={stats?.total_courses ?? '—'}                    icon={BookOpen}      sub="Current semester"       color="#059669" trend={8}  />
+        <GlassStatCard label="Revenue (PKR)"   value={stats?.total_revenue ? `₨${(stats.total_revenue/1000).toFixed(0)}K` : '—'} icon={DollarSign} sub="Fees collected"  color="#d97706" trend={-2} />
+      </div>
+
+      {/* Charts Row */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '14px' }}>
+        <GlassPanel title="Monthly Enrollments" action={
+          <span style={{ fontSize: '11px', fontWeight: 700, color: '#16a34a', background: 'rgba(22,163,74,0.08)', padding: '2px 8px', borderRadius: '99px' }}>+12% this month</span>
+        }>
+          <MiniBar data={[42, 58, 50, 72, 65, 80, 74, 88, 70, 92, 84, 96]} />
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px' }}>
+            {['J','F','M','A','M','J','J','A','S','O','N','D'].map(m => (
+              <span key={m} style={{ fontSize: '10px', color: '#a3a3a3', flex: 1, textAlign: 'center' }}>{m}</span>
+            ))}
+          </div>
+        </GlassPanel>
+
+        <GlassPanel title="Departmental Overview">
+          <ProgressRow label="Computer Science" value={stats?.total_students ? Math.round(stats.total_students * 0.35) : 0} max={stats?.total_students || 100} color="#7c3aed" />
+          <ProgressRow label="Electrical Engineering" value={stats?.total_students ? Math.round(stats.total_students * 0.28) : 0} max={stats?.total_students || 100} color="#2563eb" />
+          <ProgressRow label="Business Admin" value={stats?.total_students ? Math.round(stats.total_students * 0.20) : 0} max={stats?.total_students || 100} color="#059669" />
+          <ProgressRow label="Mechanical Eng" value={stats?.total_students ? Math.round(stats.total_students * 0.17) : 0} max={stats?.total_students || 100} color="#d97706" />
+        </GlassPanel>
+      </div>
+
+      {/* Bottom Row */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+        <GlassPanel title="Campus Resources">
+          <ProgressRow label="Library Books Available" value={stats?.available_books ?? 0} max={10000} color="#7c3aed" />
+          <ProgressRow label="Hostel Occupancy" value={stats?.hostel_occupancy ?? 0} max={stats?.total_hostel_capacity || 1000} color="#dc2626" />
+        </GlassPanel>
+        <GlassPanel title="Fee Collection Status">
+          {[
+            { label: 'Paid',    val: stats?.paid_students    ?? 0, max: stats?.total_students || 1, color: '#16a34a' },
+            { label: 'Pending', val: stats?.pending_students ?? 0, max: stats?.total_students || 1, color: '#d97706' },
+            { label: 'Overdue', val: stats?.overdue_students ?? 0, max: stats?.total_students || 1, color: '#dc2626' },
+          ].map(r => <ProgressRow key={r.label} label={r.label} value={r.val} max={r.max} color={r.color} />)}
+        </GlassPanel>
       </div>
     </div>
   );
 };
 
 
-/* ─── Student Dashboard (Boardto Layout) ──────────────────── */
+/* ─── Student Dashboard ───────────────────────────────────── */
 const StudentDashboard = ({ studentId }) => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState('all');
-  const [errorMsg, setErrorMsg] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!studentId) {
-      setErrorMsg("Student profile not properly linked. Please contact admin.");
-      setLoading(false);
-      return;
-    }
-    getStudentDashboard(studentId)
-      .then(({ data }) => setStats(data))
-      .catch(() => setErrorMsg("Failed to load dashboard data. Ensure your profile is fully set up."))
-      .finally(() => setLoading(false));
+    if (!studentId) { setError('Student profile not linked. Contact admin.'); setLoading(false); return; }
+    getStudentDashboard(studentId).then(({ data }) => setStats(data)).catch(() => setError('Failed to load data.')).finally(() => setLoading(false));
   }, [studentId]);
 
   if (loading) return <Spinner />;
-
-  if (errorMsg || !stats) {
-    return (
-      <div className="flex flex-col items-center justify-center py-20 text-center animate-fade-in-up">
-        <div className="icon-circle icon-red w-16 h-16 mx-auto mb-4">
-          <TrendingUp size={28} />
-        </div>
-        <h3 className="text-xl font-bold text-zinc-900 mb-2">Dashboard Unavailable</h3>
-        <p className="text-zinc-500 max-w-sm mx-auto text-sm">{errorMsg || "No data available."}</p>
+  if (error || !stats) return (
+    <div style={{ textAlign: 'center', padding: '64px 0' }}>
+      <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(220,38,38,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
+        <Activity size={20} style={{ color: '#dc2626' }} />
       </div>
-    );
-  }
-
-  const cards = [
-    {
-      title: 'Academic Progress',
-      subtitle: `CGPA: ${stats?.current_cgpa?.toFixed(2) || '0.00'}`,
-      icon: TrendingUp,
-      iconColorClass: 'icon-blue',
-      daysLeft: 'Current Semester',
-      progress: Math.min(100, Math.round(((stats?.current_cgpa || 0) / 4.0) * 100)) || 0,
-      avatars: ['https://i.pravatar.cc/100?img=1'],
-    },
-    {
-      title: 'Outstanding Fees',
-      subtitle: 'Finance Status',
-      icon: DollarSign,
-      iconColorClass: 'icon-red',
-      daysLeft: 'Due Next Week',
-      progress: stats?.outstanding_fee ? 20 : 100,
-      avatars: ['https://i.pravatar.cc/100?img=8'],
-    },
-    {
-      title: 'Course Enrollments',
-      subtitle: `${stats?.registered_courses ?? 0} Active Courses`,
-      icon: BookOpen,
-      iconColorClass: 'icon-green',
-      daysLeft: 'Ongoing',
-      progress: 65,
-      avatars: ['https://i.pravatar.cc/100?img=5', 'https://i.pravatar.cc/100?img=6'],
-    },
-    {
-      title: 'Library Borrows',
-      subtitle: `${stats?.books_issued ?? 0} Books Issued`,
-      icon: Library,
-      iconColorClass: 'icon-orange',
-      daysLeft: 'Return in 5 Days',
-      progress: 40,
-      avatars: ['https://i.pravatar.cc/100?img=10'],
-    },
-  ];
+      <p style={{ fontSize: '14px', fontWeight: 600, color: '#525252' }}>{error || 'No data available.'}</p>
+    </div>
+  );
 
   return (
-    <div>
-      <FilterRow activeFilter={filter} setActiveFilter={setFilter} total={12} />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {cards.map((card, i) => (
-          <BoardtoCard key={i} {...card} />
-        ))}
+    <div className="animate-fade-in">
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px', marginBottom: '22px' }}>
+        <GlassStatCard label="Current CGPA"      value={stats.current_cgpa?.toFixed(2) ?? '—'} icon={TrendingUp}  sub="Out of 4.00"             color="#7c3aed" />
+        <GlassStatCard label="Enrolled Courses"  value={stats.registered_courses ?? '—'}        icon={BookOpen}    sub="This semester"           color="#2563eb" />
+        <GlassStatCard label="Books Issued"       value={stats.books_issued ?? '—'}              icon={Library}     sub="Library books"           color="#059669" />
+        <GlassStatCard label="Outstanding Fees"   value={stats.outstanding_fee ? `₨${stats.outstanding_fee}` : 'Clear'} icon={DollarSign} sub={stats.outstanding_fee ? 'Pending payment' : 'All paid'} color={stats.outstanding_fee ? '#dc2626' : '#16a34a'} />
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+        <GlassPanel title="Academic Standing">
+          <ProgressRow label="CGPA Progress"      value={stats.current_cgpa?.toFixed(2) ?? 0} max={4.0}  color="#7c3aed" />
+          <ProgressRow label="Courses Completed"  value={stats.registered_courses ?? 0}        max={20}   color="#2563eb" />
+        </GlassPanel>
+        <GlassPanel title="Campus Life">
+          <ProgressRow label="Library Activity"   value={stats.books_issued ?? 0}  max={10} color="#059669" />
+          <ProgressRow label="Fee Status"         value={stats.outstanding_fee ? 0 : 100} max={100} color={stats.outstanding_fee ? '#dc2626' : '#16a34a'} />
+        </GlassPanel>
       </div>
     </div>
   );
 };
 
 
-/* ─── Faculty Dashboard (Boardto Layout) ──────────────────── */
+/* ─── Faculty Dashboard ───────────────────────────────────── */
 const FacultyDashboard = ({ facultyId }) => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState('all');
-  const [errorMsg, setErrorMsg] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!facultyId) {
-      setErrorMsg("Faculty profile not properly linked. Please contact admin.");
-      setLoading(false);
-      return;
-    }
-    getFacultyDashboard(facultyId)
-      .then(({ data }) => setStats(data))
-      .catch(() => setErrorMsg("Failed to load dashboard data."))
-      .finally(() => setLoading(false));
+    if (!facultyId) { setError('Faculty profile not linked. Contact admin.'); setLoading(false); return; }
+    getFacultyDashboard(facultyId).then(({ data }) => setStats(data)).catch(() => setError('Failed to load data.')).finally(() => setLoading(false));
   }, [facultyId]);
 
   if (loading) return <Spinner />;
-
-  if (errorMsg || !stats) {
-    return (
-      <div className="flex flex-col items-center justify-center py-20 text-center animate-fade-in-up">
-        <div className="icon-circle icon-red w-16 h-16 mx-auto mb-4">
-          <Monitor size={28} />
-        </div>
-        <h3 className="text-xl font-bold text-zinc-900 mb-2">Dashboard Unavailable</h3>
-        <p className="text-zinc-500 max-w-sm mx-auto text-sm">{errorMsg || "No data available."}</p>
-      </div>
-    );
-  }
-
-  const cards = [
-    {
-      title: 'Assigned Courses',
-      subtitle: `${stats.assigned_courses || 0} Sections`,
-      icon: BookOpen,
-      iconColorClass: 'icon-blue',
-      daysLeft: 'Current Semester',
-      progress: Math.min(100, Math.round(((stats.assigned_courses || 0) / 5) * 100)) || 0,
-      avatars: ['https://i.pravatar.cc/100?img=11'],
-    },
-    {
-      title: 'Total Students',
-      subtitle: 'Enrolled in your classes',
-      icon: Users,
-      iconColorClass: 'icon-green',
-      daysLeft: 'Active',
-      progress: Math.min(100, Math.round(((stats.total_students || 0) / 200) * 100)) || 0,
-      avatars: ['https://i.pravatar.cc/100?img=12', 'https://i.pravatar.cc/100?img=13'],
-    },
-    {
-      title: 'Department',
-      subtitle: stats.department_name || 'N/A',
-      icon: Layout,
-      iconColorClass: 'icon-purple',
-      daysLeft: stats.designation || 'Faculty',
-      progress: 100,
-      avatars: ['https://i.pravatar.cc/100?img=14'],
-    }
-  ];
+  if (error || !stats) return (
+    <div style={{ textAlign: 'center', padding: '64px 0' }}>
+      <p style={{ fontSize: '14px', fontWeight: 600, color: '#525252' }}>{error || 'No data.'}</p>
+    </div>
+  );
 
   return (
-    <div>
-      <FilterRow activeFilter={filter} setActiveFilter={setFilter} total={3} />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {cards.map((card, i) => (
-          <BoardtoCard key={i} {...card} />
-        ))}
+    <div className="animate-fade-in">
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '14px', marginBottom: '22px' }}>
+        <GlassStatCard label="Assigned Courses"  value={stats.assigned_courses ?? '—'} icon={BookOpen} sub="Current semester" color="#7c3aed" />
+        <GlassStatCard label="Total Students"     value={stats.total_students ?? '—'}  icon={Users}    sub="In your sections" color="#2563eb" />
+        <GlassStatCard label="Department"         value={stats.department_name ?? '—'} icon={Layout}   sub={stats.designation ?? 'Faculty'} color="#059669" />
       </div>
+      <GlassPanel title="Teaching Load">
+        <ProgressRow label="Assigned Sections" value={stats.assigned_courses ?? 0} max={5} color="#7c3aed" />
+        <ProgressRow label="Student Load"      value={stats.total_students ?? 0}  max={200} color="#2563eb" />
+      </GlassPanel>
     </div>
   );
 };
 
 
-/* ─── Dashboard Header & Layout ───────────────────────────── */
+/* ─── Dashboard Container ──────────────────────────────────── */
 const Dashboard = () => {
   const { user } = useAuth();
-  
+  const now = new Date();
+  const hour = now.getHours();
+  const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+
   return (
-    <div className="pb-10 font-inter">
-      {/* Boardto Header Style */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 animate-fade-in-up">
-        <div>
-          <h1 className="text-2xl font-bold text-zinc-900 mb-1">Reporting</h1>
-          <p className="text-sm font-semibold text-zinc-400">All project in current month</p>
-        </div>
-        <button className="hidden sm:flex items-center justify-center w-10 h-10 rounded-xl bg-[#00b4d8] text-white shadow-lg hover:bg-[#0096b4] transition-colors mt-4 sm:mt-0">
-          <Plus size={20} />
-        </button>
+    <div style={{ paddingBottom: '40px' }}>
+      {/* Header */}
+      <div style={{ marginBottom: '24px' }} className="animate-fade-in">
+        <h1 style={{ fontSize: '22px', fontWeight: 700, color: '#0a0a0a', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '-0.03em', lineHeight: 1.2, marginBottom: '4px' }}>
+          {greeting}, {user?.username} 👋
+        </h1>
+        <p style={{ fontSize: '13.5px', color: '#a3a3a3', fontWeight: 400 }}>
+          {now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+        </p>
       </div>
 
-      {user?.role === 'Admin' && <AdminDashboard />}
+      {user?.role === 'Admin'   && <AdminDashboard />}
       {user?.role === 'Student' && <StudentDashboard studentId={user?.student_id} />}
       {user?.role === 'Faculty' && <FacultyDashboard facultyId={user?.faculty_id} />}
-      
-      {/* Other Roles (Finance) */}
       {user?.role === 'Finance' && (
-        <div className="text-center py-20 animate-fade-in-up">
-          <div className="icon-circle icon-cyan w-16 h-16 mx-auto mb-4">
-            <DollarSign size={28} />
+        <div style={{ textAlign: 'center', padding: '64px 0' }}>
+          <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(217,119,6,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
+            <DollarSign size={20} style={{ color: '#d97706' }} />
           </div>
-          <h3 className="text-xl font-bold text-zinc-900 mb-2">{user?.role} Portal</h3>
-          <p className="text-zinc-500 max-w-sm mx-auto text-sm">Use the sidebar to navigate to your specific modules.</p>
+          <p style={{ fontSize: '14px', fontWeight: 600, color: '#525252' }}>Finance Portal — use the sidebar to navigate.</p>
         </div>
       )}
     </div>
