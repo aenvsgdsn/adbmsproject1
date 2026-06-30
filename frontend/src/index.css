@@ -658,8 +658,16 @@ html, body, #root {
   overflow-x: hidden;
 }
 
+/* Landing Page Nav */
+.desktop-nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
 /* ── Tablet & Below (≤ 768px) ── */
 @media (max-width: 768px) {
+  .desktop-nav { display: none; }
   /* Force full-width containers */
   body {
     -webkit-text-size-adjust: 100%;
