@@ -165,7 +165,7 @@ const AppLayout = () => {
           WebkitBackdropFilter: 'blur(20px) saturate(1.8)',
           borderTop: '1px solid rgba(0,0,0,0.07)',
           display: 'flex', justifyContent: 'space-around',
-          padding: '8px 8px 20px',
+          padding: '8px 8px calc(12px + env(safe-area-inset-bottom, 8px))',
           boxShadow: '0 -4px 20px rgba(0,0,0,0.06)',
         }}
       >
