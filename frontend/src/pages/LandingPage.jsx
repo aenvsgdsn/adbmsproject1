@@ -92,7 +92,7 @@ const LandingPage = () => (
         </div>
 
         {/* Nav links */}
-        <nav style={{ display: 'flex', alignItems: 'center', gap: '28px' }} className="hidden md:flex">
+        <nav className="desktop-nav">
           {NAV_LINKS.map(l => (
             <a key={l} href={`#${l.toLowerCase()}`}
               style={{ fontSize: '13.5px', fontWeight: 500, color: '#525252', textDecoration: 'none', transition: 'color 150ms ease' }}
