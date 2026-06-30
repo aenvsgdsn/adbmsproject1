@@ -130,9 +130,9 @@ const LandingPage = () => (
       {/* ── Glass/Gradient Overlay to keep the clean UI look ── */}
       <div style={{
         position: 'absolute', inset: 0, zIndex: 1,
-        background: 'linear-gradient(160deg, rgba(250,249,255,0.92) 0%, rgba(243,239,255,0.85) 40%, rgba(255,255,255,0.95) 100%)',
-        backdropFilter: 'blur(8px)',
-        WebkitBackdropFilter: 'blur(8px)',
+        background: 'linear-gradient(160deg, rgba(250,249,255,0.55) 0%, rgba(243,239,255,0.45) 40%, rgba(255,255,255,0.60) 100%)',
+        backdropFilter: 'blur(2px)',
+        WebkitBackdropFilter: 'blur(2px)',
       }} />
 
       {/* Background grid over the glass */}
@@ -373,7 +373,7 @@ const LandingPage = () => (
     {/* ══ FOOTER ════════════════════════════════════════ */}
     <footer style={{ background: '#0a0a0a', padding: '48px 24px 32px' }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: '40px', marginBottom: '40px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '40px', marginBottom: '40px' }}>
           {/* Brand */}
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>

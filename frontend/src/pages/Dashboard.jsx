@@ -137,7 +137,7 @@ const AdminDashboard = () => {
       </div>
 
       {/* Charts Row */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '14px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '14px', marginBottom: '14px' }}>
         <GlassPanel title="Monthly Enrollments" action={
           <span style={{ fontSize: '11px', fontWeight: 700, color: '#16a34a', background: 'rgba(22,163,74,0.08)', padding: '2px 8px', borderRadius: '99px' }}>+12% this month</span>
         }>
@@ -158,7 +158,7 @@ const AdminDashboard = () => {
       </div>
 
       {/* Bottom Row */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '14px' }}>
         <GlassPanel title="Campus Resources">
           <ProgressRow label="Library Books Available" value={stats?.available_books ?? 0} max={10000} color="#7c3aed" />
           <ProgressRow label="Hostel Occupancy" value={stats?.hostel_occupancy ?? 0} max={stats?.total_hostel_capacity || 1000} color="#dc2626" />
@@ -206,7 +206,7 @@ const StudentDashboard = ({ studentId }) => {
         <GlassStatCard label="Outstanding Fees"   value={stats.outstanding_fee ? `₨${stats.outstanding_fee}` : 'Clear'} icon={DollarSign} sub={stats.outstanding_fee ? 'Pending payment' : 'All paid'} color={stats.outstanding_fee ? '#dc2626' : '#16a34a'} />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '14px' }}>
         <GlassPanel title="Academic Standing">
           <ProgressRow label="CGPA Progress"      value={stats.current_cgpa?.toFixed(2) ?? 0} max={4.0}  color="#7c3aed" />
           <ProgressRow label="Courses Completed"  value={stats.registered_courses ?? 0}        max={20}   color="#2563eb" />
